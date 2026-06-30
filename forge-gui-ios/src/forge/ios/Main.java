@@ -8,9 +8,14 @@ import java.util.Date;
 
 import org.apache.commons.lang3.tuple.Pair;
 import org.jupnp.UpnpServiceConfiguration;
+import org.robovm.apple.coregraphics.CGRect;
 import org.robovm.apple.foundation.NSAutoreleasePool;
+import org.robovm.apple.foundation.NSBundle;
 import org.robovm.apple.uikit.UIApplication;
+import org.robovm.apple.uikit.UIDevice;
 import org.robovm.apple.uikit.UIPasteboard;
+import org.robovm.apple.uikit.UIScreen;
+import org.robovm.apple.uikit.UIUserInterfaceIdiom;
 
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
@@ -25,12 +30,24 @@ public class Main extends IOSApplication.Delegate {
 
     @Override
     protected IOSApplication createApplication() {
-        final String assetsDir = new IOSFiles().getLocalStoragePath() + "/../../forge.ios.Main.app/";
+        // forge-mac: read-only game assets (res/) are bundled INSIDE the .app, so point assetsDir
+        // at the real bundle path. The legacy "<storage>/../../forge.ios.Main.app/" is invalid on
+        // iOS 8+ (app bundle and data live in separate containers). Writable game data/cache go to
+        // the app's Documents container instead (see ForgeProfileProperties, which reads these props).
+        final String assetsDir = NSBundle.getMainBundle().getBundlePath() + "/";
+        final String docs = new IOSFiles().getLocalStoragePath() + "/";
+        System.setProperty("forge.assetsDir", assetsDir);              // Adventure (Config.resPath)
+        System.setProperty("forge.profile.userDir", docs + "data/");   // saves, decks, prefs (writable)
+        System.setProperty("forge.profile.cacheDir", docs + "cache/"); // card images, music (writable)
+
+        final boolean isTablet = UIDevice.getCurrentDevice().getUserInterfaceIdiom() == UIUserInterfaceIdiom.Pad;
+        final CGRect bounds = UIScreen.getMainScreen().getBounds();
+        final boolean isPortrait = bounds.getSize().getHeight() >= bounds.getSize().getWidth();
 
         final IOSApplicationConfiguration config = new IOSApplicationConfiguration();
         config.useAccelerometer = false;
         config.useCompass = false;
-        final ApplicationListener app = Forge.getApp(null, new IOSClipboard(), new IOSAdapter(), assetsDir, false, false, 0);
+        final ApplicationListener app = Forge.getApp(null, new IOSClipboard(), new IOSAdapter(), assetsDir, isPortrait, isTablet, 0);
         final IOSApplication iosApp = new IOSApplication(app, config);
         return iosApp;
     }

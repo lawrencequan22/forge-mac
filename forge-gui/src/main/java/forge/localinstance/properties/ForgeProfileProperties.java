@@ -159,6 +159,14 @@ public class ForgeProfileProperties {
     // returns a pair <userDir, cacheDir>
     private static Pair<String, String> getDefaultDirs() {
         if (!GuiBase.getInterface().isRunningOnDesktop()) { //special case for mobile devices
+            // forge-mac: on iOS the assets dir is the read-only app bundle, so data/cache must live
+            // in a writable container. The iOS launcher sets these props; absent (e.g. Android,
+            // where the assets dir is itself writable) we fall back to the original behavior.
+            final String userOverride = System.getProperty("forge.profile.userDir");
+            final String cacheOverride = System.getProperty("forge.profile.cacheDir");
+            if (userOverride != null && !userOverride.isEmpty() && cacheOverride != null && !cacheOverride.isEmpty()) {
+                return Pair.of(userOverride, cacheOverride);
+            }
             final String assetsDir = ForgeConstants.ASSETS_DIR;
             return Pair.of(assetsDir + "data" + File.separator, assetsDir + "cache" + File.separator);
         }

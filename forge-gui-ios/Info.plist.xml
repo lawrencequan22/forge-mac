@@ -35,6 +35,10 @@
     </array>
     <key>MinimumOSVersion</key>
     <string>13.0</string>
+    <key>UILaunchScreen</key>
+    <dict/>
+    <key>UIRequiresFullScreen</key>
+    <true/>
     <key>UISupportedInterfaceOrientations</key>
     <array>
         <string>UIInterfaceOrientationPortrait</string>

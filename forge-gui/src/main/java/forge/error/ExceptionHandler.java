@@ -19,6 +19,7 @@
 package forge.error;
 
 import forge.FTrace;
+import forge.gui.GuiBase;
 import forge.gui.error.BugReporter;
 import forge.localinstance.properties.ForgeConstants;
 import forge.util.MultiplexOutputStream;
@@ -115,51 +116,69 @@ public class ExceptionHandler implements UncaughtExceptionHandler {
         }
 
         File parent = new File(ForgeConstants.LOG_FILE).getParentFile();
-        parent.mkdirs();
-
-        // Archive slot files whose JVM has exited. FileLock probes liveness:
-        // POSIX rename succeeds even when another process has the file open, so
-        // rename-success isn't a liveness signal. FileLock is honored cross-process.
-        File[] existingSlots = parent.listFiles(f -> f.isFile() && SLOT_PATTERN.matcher(f.getName()).matches());
-        if (existingSlots != null) {
-            SimpleDateFormat ts = new SimpleDateFormat(TIMESTAMP_FORMAT);
-            for (File slot : existingSlots) {
-                boolean unowned = false;
-                try (FileChannel probe = FileChannel.open(slot.toPath(), StandardOpenOption.WRITE)) {
-                    FileLock lock = probe.tryLock();
-                    if (lock != null) {
-                        lock.release();
-                        unowned = true;
-                    }
-                } catch (IOException ignored) {}
-                if (unowned) {
-                    File archive = nextAvailable(new File(parent,
-                            "forge." + ts.format(new Date(slot.lastModified())) + LOG_SUFFIX));
-                    slot.renameTo(archive);
-                }
-            }
+        if (parent != null) {
+            parent.mkdirs();
         }
 
-        // CREATE_NEW is atomic, so concurrent startups can't both claim the same slot
-        for (int n = 0; ; n++) {
-            File slot = slotFile(parent, n);
+        // forge-mac: on iOS, FileChannel.tryLock() on the sandboxed container hangs the launch
+        // thread (and Forge.create() runs on the main thread during scene-create, so this trips
+        // iOS's 20s watchdog). iOS is a single sandboxed instance and doesn't need the cross-process
+        // log-slot scheme, so just write one plain log file there. Desktop + Android are unchanged.
+        boolean isIOS = GuiBase.getInterface() != null
+                && GuiBase.getInterface().isLibgdxPort() && !GuiBase.isAndroid();
+        if (isIOS) {
             try {
-                FileChannel ch = FileChannel.open(slot.toPath(),
-                        StandardOpenOption.CREATE_NEW, StandardOpenOption.WRITE, StandardOpenOption.READ);
-                FileLock lock = ch.tryLock();
-                if (lock != null) {
-                    logChannel = ch;
-                    logLock = lock;
-                    logFileStream = Channels.newOutputStream(ch);
-                    activeLogFile = slot;
+                File log = new File(ForgeConstants.LOG_FILE);
+                logFileStream = new FileOutputStream(log, false);
+                activeLogFile = log;
+            } catch (FileNotFoundException ignored) {
+                // logging is best-effort; never block or fail startup over it
+            }
+        } else {
+            // Archive slot files whose JVM has exited. FileLock probes liveness:
+            // POSIX rename succeeds even when another process has the file open, so
+            // rename-success isn't a liveness signal. FileLock is honored cross-process.
+            File[] existingSlots = parent.listFiles(f -> f.isFile() && SLOT_PATTERN.matcher(f.getName()).matches());
+            if (existingSlots != null) {
+                SimpleDateFormat ts = new SimpleDateFormat(TIMESTAMP_FORMAT);
+                for (File slot : existingSlots) {
+                    boolean unowned = false;
+                    try (FileChannel probe = FileChannel.open(slot.toPath(), StandardOpenOption.WRITE)) {
+                        FileLock lock = probe.tryLock();
+                        if (lock != null) {
+                            lock.release();
+                            unowned = true;
+                        }
+                    } catch (IOException ignored) {}
+                    if (unowned) {
+                        File archive = nextAvailable(new File(parent,
+                                "forge." + ts.format(new Date(slot.lastModified())) + LOG_SUFFIX));
+                        slot.renameTo(archive);
+                    }
+                }
+            }
+
+            // CREATE_NEW is atomic, so concurrent startups can't both claim the same slot
+            for (int n = 0; ; n++) {
+                File slot = slotFile(parent, n);
+                try {
+                    FileChannel ch = FileChannel.open(slot.toPath(),
+                            StandardOpenOption.CREATE_NEW, StandardOpenOption.WRITE, StandardOpenOption.READ);
+                    FileLock lock = ch.tryLock();
+                    if (lock != null) {
+                        logChannel = ch;
+                        logLock = lock;
+                        logFileStream = Channels.newOutputStream(ch);
+                        activeLogFile = slot;
+                        break;
+                    }
+                    ch.close();
+                } catch (FileAlreadyExistsException e) {
+                    // slot owned by another live instance; try next
+                } catch (IOException e) {
+                    e.printStackTrace();
                     break;
                 }
-                ch.close();
-            } catch (FileAlreadyExistsException e) {
-                // slot owned by another live instance; try next
-            } catch (IOException e) {
-                e.printStackTrace();
-                break;
             }
         }
 
