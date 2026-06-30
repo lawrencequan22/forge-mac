@@ -85,6 +85,12 @@ public class GuiDesktop implements IGuiBase {
 
     @Override
     public String getAssetsDir() {
+        // forge-mac: allow a packaged .app to point at an absolute assets dir, since a native
+        // (jpackage) launcher does not set the process working directory the way forge.sh does.
+        final String assetsOverride = System.getProperty("forge.assetsDir");
+        if (assetsOverride != null && !assetsOverride.isEmpty()) {
+            return assetsOverride.endsWith("/") ? assetsOverride : assetsOverride + "/";
+        }
         return StringUtils.containsIgnoreCase(BuildInfo.getVersionString(), "git") ?
                 // FIXME: replace this hardcoded value!!
                 "../forge-gui/" : "";

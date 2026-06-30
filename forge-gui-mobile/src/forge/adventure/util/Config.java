@@ -124,7 +124,12 @@ public class Config {
     }
 
     private String resPath() {
-
+        // forge-mac: a native (jpackage) .app launches with cwd=/, so the cwd-relative "./res"
+        // probe below fails. Honor an absolute assets dir from -Dforge.assetsDir when set.
+        final String override = System.getProperty("forge.assetsDir");
+        if (override != null && !override.isEmpty() && !GuiBase.isAndroid()) {
+            return override.endsWith("/") ? override : override + "/";
+        }
         return GuiBase.isAndroid() ? ForgeConstants.ASSETS_DIR : Files.exists(Paths.get("./res")) ? "./" : Files.exists(Paths.get("./forge-gui/")) ? "./forge-gui/" : "../forge-gui";
     }
 

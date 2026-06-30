@@ -22,7 +22,12 @@ import java.nio.file.Paths;
 
 public class GameLauncher {
     public GameLauncher(final String versionString, final String[] args) {
-        String assetsDir = Files.exists(Paths.get("./res")) ? "./" : "../forge-gui/";
+        // forge-mac: a native (jpackage) .app launches with cwd=/, so the cwd-relative "./res"
+        // probe fails. Honor an absolute assets dir from -Dforge.assetsDir when set.
+        final String assetsOverride = System.getProperty("forge.assetsDir");
+        String assetsDir = (assetsOverride != null && !assetsOverride.isEmpty())
+                ? (assetsOverride.endsWith("/") ? assetsOverride : assetsOverride + "/")
+                : Files.exists(Paths.get("./res")) ? "./" : "../forge-gui/";
 
         // Place the file "switch_orientation.ini" to your assets folder to make the game switch to landscape orientation (unless desktopMode = true)
         String switchOrientationFile = assetsDir + "switch_orientation.ini";
