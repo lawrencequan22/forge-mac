@@ -32,6 +32,24 @@ echo "==> Compiling RecordDesugar ..."
 mkdir -p "$IOS/tools/out"
 javac -cp "$ASM" -d "$IOS/tools/out" "$IOS/tools/RecordDesugar.java"
 
+# 1b. Add java.io.File.toPath() to the RoboVM SDK runtime (idempotent). MobiVM's iOS runtime has no
+#     toPath(); Forge calls file.toPath(), and RoboVM searches its runtime jar BEFORE our boot
+#     classpath, so a bootclasspath override can't add it — we patch the runtime's File.class itself.
+echo "==> Ensuring java.io.File.toPath() in the RoboVM SDK runtime ..."
+javac -cp "$IOS/tools/lib/asm-9.4.jar" -d "$IOS/tools/out" "$IOS/tools/FilePatcher.java"
+RTJAR="$(find "$HOME/.m2/repository/com/mobidevelop/robovm/robovm-dist" -path '*unpacked*' -name robovm-rt.jar 2>/dev/null | head -1)"
+if [ -n "$RTJAR" ] && ! javap -p -cp "$RTJAR" java.io.File 2>/dev/null | grep -q toPath; then
+  tmp="$(mktemp -d)"; mkdir -p "$tmp/java/io"
+  ( cd "$tmp" && unzip -o -q "$RTJAR" 'java/io/File.class' \
+      && java -cp "$IOS/tools/out:$IOS/tools/lib/asm-9.4.jar" FilePatcher java/io/File.class java/io/File.class \
+      && jar uf "$RTJAR" java/io/File.class )
+  find "$HOME/.robovm/cache" -name robovm-rt.jar -exec cp "$RTJAR" {} \; 2>/dev/null || true
+  rm -rf "$tmp"
+  echo "    patched $RTJAR"
+else
+  echo "    already present"
+fi
+
 # 2. Reactor build (-am resolves ${revision}); the ios-derecord profile runs the transformer at
 #    prepare-package; the ios-sim/ios-device profile runs the MobiVM goal at package.
 # Device builds need a code-signing identity + provisioning profile. Pass them via env:
