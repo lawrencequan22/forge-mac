@@ -3,9 +3,12 @@
   <mainClass>${app.mainclass}</mainClass>
   <os>ios</os>
   <arch>arm64</arch>
-  <!-- forge-mac: drop classes unreachable from the app roots before AOT. Shrinks the binary and
-       sidesteps MobiVM/Soot choking on bytecode in heavy, mostly-unused deps (e.g. jetty). -->
-  <treeShaker>conservative</treeShaker>
+  <!-- forge-mac: tree-shaking is OFF (the default). Forge leans heavily on reflection (card
+       scripts, XStream, EnumMap over FPref, etc.); the conservative tree-shaker strips
+       reflectively-reached members and causes runtime AssertionError/NoSuchMethod. Jetty (the only
+       reason we briefly enabled shaking) is already excluded via forge-gui-ios/pom.xml, so keeping
+       every class is safe. Binary is larger; correctness wins. -->
+  <treeShaker>none</treeShaker>
   <resources>
     <resource>
       <directory>../forge-gui</directory>
