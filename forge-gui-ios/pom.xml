@@ -149,6 +149,15 @@
             <groupId>forge</groupId>
             <artifactId>forge-gui</artifactId>
             <version>${project.version}</version>
+            <!-- forge-mac: Jetty (network-game hosting) is not referenced by any Forge code on the
+                 iOS path, and MobiVM's old frontend can't parse some Jetty bytecode. Drop it from
+                 the iOS build. (LAN hosting is unavailable on iOS; everything else works.) -->
+            <exclusions>
+                <exclusion>
+                    <groupId>org.eclipse.jetty</groupId>
+                    <artifactId>*</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>forge</groupId>
