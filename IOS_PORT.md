@@ -90,10 +90,21 @@ and build in the reactor (`-am`) or resolution fails. The build script handles t
 
 ## 4. The diagnostic loop (how every blocker was found — use this)
 
-The app logs to **`forge.log`** inside its writable container. After a launch:
+**Preferred: `scripts/ios-run.sh` does the whole capture in one command.** It auto-detects the
+connected device, launches the app, pulls `forge.log` + any `enum*.log` + crash reports into
+`build/ios-logs/<stamp>/`, parses the blocker, and appends a structured entry to
+**`forge-gui-ios/PORT_LOG.md`** (the durable progress log — read its last entry for current state):
 
 ```sh
-IPAD=00008103-000A654E36D3001E
+./scripts/build-ios.sh device          # build + install (~15 min)
+./scripts/ios-run.sh "what I changed"  # launch + capture + log -> PORT_LOG.md
+tail -20 forge-gui-ios/PORT_LOG.md      # newest entry = current status + blocker + artifact path
+```
+
+The app logs to **`forge.log`** in its writable container; to pull it by hand:
+
+```sh
+IPAD=00008103-000A654E36D3001E   # hardware UDID; the coredevice UUID from `devicectl list` also works
 xcrun devicectl device process launch --device $IPAD ca.lawrencequan.forge   # or --console
 xcrun devicectl device copy from --device $IPAD \
   --domain-type appDataContainer --domain-identifier ca.lawrencequan.forge \
