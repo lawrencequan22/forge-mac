@@ -2,7 +2,10 @@
   <executableName>${app.executable}</executableName>
   <mainClass>${app.mainclass}</mainClass>
   <os>ios</os>
-  <arch>thumbv7</arch>
+  <arch>arm64</arch>
+  <!-- forge-mac: drop classes unreachable from the app roots before AOT. Shrinks the binary and
+       sidesteps MobiVM/Soot choking on bytecode in heavy, mostly-unused deps (e.g. jetty). -->
+  <treeShaker>conservative</treeShaker>
   <resources>
     <resource>
       <directory>../forge-gui</directory>
@@ -30,7 +33,6 @@
     <pattern>org.apache.harmony.security.provider.crypto.CryptoProvider</pattern>
     <pattern>org.apache.xalan.processor.TransformerFactoryImpl</pattern>
     <pattern>java.util.logging.**</pattern>
-    <pattern>com.esotericsoftware.minlog.Log</pattern>
     <pattern>com.badlogic.gdx.**</pattern>
   </forceLinkClasses>
   <libs>

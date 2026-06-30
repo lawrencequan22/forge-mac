@@ -38,6 +38,97 @@
         <finalName>forge-ios-${revision}</finalName>
     </build>
 
+    <!-- forge-mac: MobiVM (maintained RoboVM fork) iOS AOT compiler / packager, pinned to the
+         version gdx-backend-robovm:1.13.5 depends on. Gated behind profiles so it only runs on
+         explicit request (each binds the goal to forge-gui-ios's package phase so it fires for
+         this module alone when built in the reactor with -am). -->
+    <profiles>
+        <!-- forge-mac: de-record pass. MobiVM's runtime is Java-8 level (no java.lang.Record /
+             ObjectMethods), so it can't compile Java records. This runs the ASM transformer over
+             the already-built sibling module outputs (jars + classes) BEFORE the robovm goal, in
+             the same reactor pass. Activate alongside ios-sim / ios-device:  -P ios-derecord,ios-sim
+             Requires tools/out compiled first (scripts/build-ios.sh does this). -->
+        <profile>
+            <id>ios-derecord</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>exec-maven-plugin</artifactId>
+                        <version>3.1.0</version>
+                        <executions>
+                            <execution>
+                                <id>de-record</id>
+                                <phase>prepare-package</phase>
+                                <goals><goal>exec</goal></goals>
+                                <configuration>
+                                    <executable>java</executable>
+                                    <arguments>
+                                        <argument>-cp</argument>
+                                        <argument>${project.basedir}/tools/out:${project.basedir}/tools/lib/asm-9.4.jar:${project.basedir}/tools/lib/asm-tree-9.4.jar:${project.basedir}/tools/lib/asm-analysis-9.4.jar:${project.basedir}/tools/lib/asm-commons-9.4.jar</argument>
+                                        <argument>RecordDesugar</argument>
+                                        <argument>${project.basedir}/../forge-core/target</argument>
+                                        <argument>${project.basedir}/../forge-game/target</argument>
+                                        <argument>${project.basedir}/../forge-ai/target</argument>
+                                        <argument>${project.basedir}/../forge-gui/target</argument>
+                                        <argument>${project.basedir}/../forge-gui-mobile/target</argument>
+                                        <argument>${project.basedir}/target</argument>
+                                    </arguments>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>ios-sim</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>com.mobidevelop.robovm</groupId>
+                        <artifactId>robovm-maven-plugin</artifactId>
+                        <version>2.3.23</version>
+                        <configuration>
+                            <propertiesFile>robovm.properties</propertiesFile>
+                            <configFile>robovm.xml</configFile>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>ipad-sim</id>
+                                <phase>package</phase>
+                                <goals><goal>ipad-sim</goal></goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>ios-device</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>com.mobidevelop.robovm</groupId>
+                        <artifactId>robovm-maven-plugin</artifactId>
+                        <version>2.3.23</version>
+                        <configuration>
+                            <propertiesFile>robovm.properties</propertiesFile>
+                            <configFile>robovm.xml</configFile>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>ios-device</id>
+                                <phase>package</phase>
+                                <goals><goal>ios-device</goal></goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+
     <dependencies>
         <dependency>
             <groupId>forge</groupId>

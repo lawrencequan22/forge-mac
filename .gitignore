@@ -102,3 +102,6 @@ forge-gui/tools/build
 
 # Native macOS build output (forge-mac)
 /build/
+
+# iOS de-record transformer build output
+forge-gui-ios/tools/out/
