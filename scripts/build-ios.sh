@@ -34,7 +34,18 @@ javac -cp "$ASM" -d "$IOS/tools/out" "$IOS/tools/RecordDesugar.java"
 
 # 2. Reactor build (-am resolves ${revision}); the ios-derecord profile runs the transformer at
 #    prepare-package; the ios-sim/ios-device profile runs the MobiVM goal at package.
+# Device builds need a code-signing identity + provisioning profile. Pass them via env:
+#   FORGE_IOS_SIGN_IDENTITY="Apple Development: YOUR NAME (TEAMID)"
+#   FORGE_IOS_PROFILE="<provisioning profile name or UUID>"   (must be in ~/Library/MobileDevice/Provisioning Profiles)
+EXTRA=()
+if [ "$TARGET" = device ]; then
+  [ -n "${FORGE_IOS_SIGN_IDENTITY:-}" ] && EXTRA+=("-Drobovm.iosSignIdentity=${FORGE_IOS_SIGN_IDENTITY}")
+  [ -n "${FORGE_IOS_PROFILE:-}" ]        && EXTRA+=("-Drobovm.iosProvisioningProfile=${FORGE_IOS_PROFILE}")
+else
+  EXTRA+=("-Drobovm.device.name=${FORGE_IOS_SIM_DEVICE:-iPad Pro 11-inch (M5)}")
+fi
+
 echo "==> Reactor build + de-record + MobiVM ($GOALP) ..."
 mvn -pl forge-gui-ios -am package -P ios-derecord,"$GOALP" \
     -Drevision="$REV" -DskipTests -Dcheckstyle.skip=true \
-    -Drobovm.device.name="iPad Pro 11-inch (M5)"
+    "${EXTRA[@]}"
