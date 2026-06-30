@@ -190,14 +190,17 @@
             <version>1.13.5</version>
             <classifier>natives-ios</classifier>
         </dependency>
-        <!-- forge-mac: minimal java.lang.management stub (absent from MobiVM's iOS runtime) so
-             tinylog's RuntimeProvider can initialize. Source in stubs/; jar built once. -->
+        <!-- forge-mac: the boot-classpath stub jar (built by scripts/build-ios.sh from stubs/):
+             java.nio.file.*, java.lang.management.* (absent from MobiVM's iOS runtime), and
+             forge.rt.EnumRegistry (large-enum reflection workaround). system scope = compile-only,
+             NOT bundled; at AOT it's supplied via robovm.xml <bootclasspath>. Lets Forge/Main compile
+             against forge.rt.EnumRegistry while it loads from the boot loader at runtime. -->
         <dependency>
             <groupId>forge-mac</groupId>
-            <artifactId>management-stub</artifactId>
+            <artifactId>ios-stubs</artifactId>
             <version>1.0</version>
             <scope>system</scope>
-            <systemPath>${project.basedir}/libs/management-stub.jar</systemPath>
+            <systemPath>${project.basedir}/libs/ios-stubs.jar</systemPath>
         </dependency>
     </dependencies>
 </project>

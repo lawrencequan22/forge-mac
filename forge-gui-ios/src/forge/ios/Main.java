@@ -34,27 +34,38 @@ public class Main extends IOSApplication.Delegate {
     // so getEnumConstants()/EnumMap fail at runtime with a bare AssertionError. Touching each enum's
     // values() reflectively HERE, with a class literal, forces RoboVM to keep the stub. Extend this
     // list whenever a new enum is reached via a generic-Class path.
-    private static void keepEnumReflection(String docs) {
-        Class<?>[] enums = {
-            forge.localinstance.properties.ForgePreferences.FPref.class,
-            forge.localinstance.properties.ForgeNetPreferences.FNetPref.class,
-            forge.gamemodes.planarconquest.ConquestPreferences.CQPref.class,
-            forge.gamemodes.quest.data.QuestPreferences.QPref.class,
-            forge.trackable.TrackableProperty.class,
-        };
-        java.io.File log = new java.io.File(docs, "enumfix.log");
-        try (java.io.PrintWriter w = new java.io.PrintWriter(log)) {
-            for (Class<?> c : enums) {
-                // getEnumConstants() goes through Enum.getSharedConstants and populates its
-                // per-class BasicLruCache with a traceable class literal -> the later generic
-                // new EnumMap<>(clasz) reuses the cache instead of re-reflecting.
-                try { Object[] ec = c.getEnumConstants();
-                      w.println(c.getName() + " getEnumConstants: " + (ec == null ? "null" : "OK " + ec.length)); }
-                catch (Throwable t) { w.println(c.getName() + " getEnumConstants FAILED: " + t); }
-                // also exercise the exact failing op with a literal, to compare vs the generic site
-                try { new java.util.EnumMap(c); w.println(c.getName() + " EnumMap(literal): OK"); }
-                catch (Throwable t) { w.println(c.getName() + " EnumMap(literal) FAILED: " + t); }
-            }
+    // forge-mac: MobiVM can't reflect values() on very large enums, which breaks EnumMap /
+    // getEnumConstants for them. Register their constants here with DIRECT (non-reflective) values()
+    // calls; the build rt-patches java.lang.Enum.getSharedConstants to return these. Add any enum that
+    // crashes startup with a bare AssertionError under EnumMap/getSharedConstants (find big enums via
+    // constant count). Currently: FPref (285) and TrackableProperty (216).
+    private static void registerLargeEnums(String docs) {
+        // forge.rt.EnumRegistry is on the boot classpath (so the rt-patched java.lang.Enum can see it)
+        // and on the compile classpath (system-scope dep in pom). Register with a DIRECT call — a
+        // reflective register/values() is itself unreliable under RoboVM AOT. Log each step.
+        try (java.io.PrintWriter w = new java.io.PrintWriter(new java.io.File(docs, "enumfix.log"))) {
+            Class<forge.localinstance.properties.ForgePreferences.FPref> fp =
+                    forge.localinstance.properties.ForgePreferences.FPref.class;
+            Class<forge.trackable.TrackableProperty> tp = forge.trackable.TrackableProperty.class;
+            try {
+                Object[] v = forge.localinstance.properties.ForgePreferences.FPref.values();  // DIRECT values()
+                w.println("FPref.values() direct: OK len=" + v.length);
+                forge.rt.EnumRegistry.register(fp, v);                                         // DIRECT register
+                Object[] got = forge.rt.EnumRegistry.get(fp);
+                w.println("EnumRegistry.get(FPref) after register: " + (got == null ? "NULL" : "len=" + got.length));
+            } catch (Throwable t) { w.println("FPref register step FAILED: " + t); }
+            try {
+                Object[] v = forge.trackable.TrackableProperty.values();
+                w.println("TrackableProperty.values() direct: OK len=" + v.length);
+                forge.rt.EnumRegistry.register(tp, v);
+            } catch (Throwable t) { w.println("TrackableProperty register step FAILED: " + t); }
+
+            // The actual ops that used to crash:
+            try { new java.util.EnumMap(fp); w.println("FPref EnumMap: OK"); }
+            catch (Throwable t) { w.println("FPref EnumMap: FAILED " + t); }
+            try { Object[] ec = tp.getEnumConstants();
+                  w.println("TrackableProperty getEnumConstants: " + (ec == null ? "null" : "OK " + ec.length)); }
+            catch (Throwable t) { w.println("TrackableProperty getEnumConstants: FAILED " + t); }
         } catch (Throwable ignored) {}
     }
 
@@ -70,7 +81,7 @@ public class Main extends IOSApplication.Delegate {
         System.setProperty("forge.profile.userDir", docs + "data/");   // saves, decks, prefs (writable)
         System.setProperty("forge.profile.cacheDir", docs + "cache/"); // card images, music (writable)
 
-        keepEnumReflection(docs); // forge-mac: retain reflective enum values() for generic-Class EnumMap sites
+        registerLargeEnums(docs); // forge-mac: non-reflective constants for enums MobiVM can't reflect (large)
 
         final boolean isTablet = UIDevice.getCurrentDevice().getUserInterfaceIdiom() == UIUserInterfaceIdiom.Pad;
         final CGRect bounds = UIScreen.getMainScreen().getBounds();

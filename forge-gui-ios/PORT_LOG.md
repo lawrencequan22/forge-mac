@@ -43,3 +43,43 @@ _(entries appended by `scripts/ios-run.sh` — newest at the bottom)_
 - blocker: `EDT > java.lang.AssertionError  ||  at forge.localinstance.properties.PreferencesStore.<init>(PreferencesStore.java:43)`
 - furthest log line: `at forge.ios.Main.main(Main.java:89)`
 - artifacts: `build/ios-logs/20260630-155254/` (forge.log, enum*.log, crashes/ [0], launch.txt)
+
+### 20260630-164738
+- commit: `d1c9cba9fa ios-port-wip` — iOS: robust per-iteration progress logging (ios-run.sh + PORT_LOG.md)
+- testing: registry fix: rt-patched Enum.getSharedConstants + forge.ios.EnumRegistry for FPref/TrackableProperty
+- status: **CRASH**
+- blocker: `EDT > java.lang.AssertionError  ||  at forge.localinstance.properties.PreferencesStore.<init>(PreferencesStore.java:43)`
+- furthest log line: `at forge.ios.Main.main(Main.java:89)`
+- artifacts: `build/ios-logs/20260630-164738/` (forge.log, enum*.log, crashes/ [0], launch.txt)
+
+### 20260630-170303
+- commit: `d1c9cba9fa ios-port-wip` — iOS: robust per-iteration progress logging (ios-run.sh + PORT_LOG.md)
+- testing: registry fix — testing the ACTUAL new build on iPad (prior runs hit a stale install)
+- status: **CRASH**
+- blocker: `EDT > java.lang.AssertionError  ||  at forge.localinstance.properties.PreferencesStore.<init>(PreferencesStore.java:43)`
+- furthest log line: `at forge.ios.Main.main(Main.java:89)`
+- artifacts: `build/ios-logs/20260630-170303/` (forge.log, enum*.log, crashes/ [0], launch.txt)
+
+### 20260630-172948
+- commit: `d1c9cba9fa ios-port-wip` — iOS: robust per-iteration progress logging (ios-run.sh + PORT_LOG.md)
+- testing: boot-classpath EnumRegistry + reflective register — testing FPref large-enum fix
+- status: **CRASH**
+- blocker: `EDT > java.lang.AssertionError  ||  at forge.localinstance.properties.PreferencesStore.<init>(PreferencesStore.java:43)`
+- furthest log line: `at forge.ios.Main.main(Main.java:93)`
+- artifacts: `build/ios-logs/20260630-172948/` (forge.log, enum*.log, crashes/ [0], launch.txt)
+
+### 20260630-174758
+- commit: `d1c9cba9fa ios-port-wip` — iOS: robust per-iteration progress logging (ios-run.sh + PORT_LOG.md)
+- testing: DIRECT registration via system-dep + boot-classpath EnumRegistry — conclusive FPref test
+- status: **CRASH**
+- blocker: `EDT > java.lang.AssertionError  ||  at forge.localinstance.properties.PreferencesStore.<init>(PreferencesStore.java:43)`
+- furthest log line: `at forge.ios.Main.main(Main.java:100)`
+- artifacts: `build/ios-logs/20260630-174758/` (forge.log, enum*.log, crashes/ [0], launch.txt)
+
+### 20260630-181221
+- commit: `d1c9cba9fa ios-port-wip` — iOS: robust per-iteration progress logging (ios-run.sh + PORT_LOG.md)
+- testing: StringJoiner stub — does FPref clear now (missing-class theory)?
+- status: **CRASH**
+- blocker: `Game BT1 > java.lang.NoClassDefFoundError: java.util.function.Function  ||  at forge.util.Lang.initInstance(Lang.java:37)`
+- furthest log line: `at forge.Forge$$Lambda$2.run(Unknown Source)`
+- artifacts: `build/ios-logs/20260630-181221/` (forge.log, enum*.log, crashes/ [0], launch.txt)
