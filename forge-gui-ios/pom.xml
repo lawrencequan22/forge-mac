@@ -169,6 +169,27 @@
             <artifactId>gdx-backend-robovm</artifactId>
             <version>1.13.5</version>
         </dependency>
+        <!-- forge-mac: matching libGDX 1.13.5 iOS native frameworks (gdx + ObjectAL, freetype,
+             box2d). RoboVM auto-links the xcframeworks from META-INF/robovm/ios/libs in these jars.
+             Replaces the stale hand-committed libs/*.a (which lacked e.g. glTexImage2DJNI). -->
+        <dependency>
+            <groupId>com.badlogicgames.gdx</groupId>
+            <artifactId>gdx-platform</artifactId>
+            <version>1.13.5</version>
+            <classifier>natives-ios</classifier>
+        </dependency>
+        <dependency>
+            <groupId>com.badlogicgames.gdx</groupId>
+            <artifactId>gdx-freetype-platform</artifactId>
+            <version>1.13.5</version>
+            <classifier>natives-ios</classifier>
+        </dependency>
+        <dependency>
+            <groupId>com.badlogicgames.gdx</groupId>
+            <artifactId>gdx-box2d-platform</artifactId>
+            <version>1.13.5</version>
+            <classifier>natives-ios</classifier>
+        </dependency>
         <!-- forge-mac: minimal java.lang.management stub (absent from MobiVM's iOS runtime) so
              tinylog's RuntimeProvider can initialize. Source in stubs/; jar built once. -->
         <dependency>

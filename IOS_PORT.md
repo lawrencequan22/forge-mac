@@ -198,57 +198,61 @@ established patterns; you'll reuse them.
 
 ---
 
-## 7. CURRENT BLOCKER — `EnumMap` / enum reflection
+## 7. CURRENT BLOCKER — MobiVM fails reflective `values()` on **large** enums (DIAGNOSED)
 
-**Symptom** (`forge.log`):
-```
-java.lang.AssertionError
-  at java.lang.Enum$1.create(Enum.java:52)
-  at libcore.util.BasicLruCache.get(BasicLruCache.java:54)
-  at java.lang.Enum.getSharedConstants(Enum.java:216)
-  at java.util.EnumMap.<init>(EnumMap.java:404)
-  at forge.localinstance.properties.PreferencesStore.<init>(PreferencesStore.java:43)   // new EnumMap<>(FPref.class)
-  at forge.Forge.create(Forge.java:204)
-```
+**Symptom** (`forge.log`): bare `AssertionError` from `java.lang.Enum$1.create` →
+`Enum.getSharedConstants` → `EnumMap.<init>` → `PreferencesStore.<init>:43`
+(`new EnumMap<>(clasz)`) → `Forge.create():204` (loading `FPref`).
 
-**Root cause (decompiled from MobiVM's rt):** `EnumMap.<init>` → `Enum.getSharedConstants(Class)` →
-`Enum$1.create(Class)` does `enumType.getDeclaredMethod("values").setAccessible(true).invoke(null)`
-and throws `AssertionError` from the catch when that reflection fails. So **reflectively invoking an
-enum's compiler-generated `values()` fails under RoboVM AOT.** `Class.getEnumConstants()` goes
-through the same path (no native shortcut in MobiVM's `Class`). Confirmed it is NOT tree-shaking
-(still fails with shaking off).
+**Root cause — settled by a spike (do not re-litigate):** `Enum.getSharedConstants` reflectively does
+`enumType.getDeclaredMethod("values").invoke(...)` and throws a message-less `AssertionError` on
+failure. An on-device experiment (`forge-gui-ios/src/forge/ios/Main.java` `keepEnumReflection`,
+logging to `Library/local/enumfix.log`) tested each affected enum directly:
 
-**Why it's important:** `EnumMap` is used widely in Forge, and this is the canonical "RoboVM can't
-reflect" signal. Expect the same class of failure later in **XStream** (save/load of quests,
-gauntlets, tournaments, decks — heavy reflection) and possibly **card-script/ability loading**.
+| enum | # constants | reflective `values()` / `EnumMap` |
+|---|---|---|
+| FNetPref | 6 | **OK** |
+| CQPref | 22 | **OK** |
+| QPref | 89 | **OK** |
+| TrackableProperty | 216 | **FAILS** |
+| FPref | 285 | **FAILS** |
 
-**Hypotheses & next steps (in priority order):**
-1. **EnumMap normally works on RoboVM** (every libGDX game uses enums) — so determine what's different
-   here. Bisect: build a trivial test that does `new EnumMap<>(SomeEnum.class)` early in
-   `forge.ios.Main` and see if it also fails. If a *fresh* enum fails too → it's a global
-   reflection-config problem, not FPref-specific.
-2. **Find the precise failing call.** Patch `Enum$1.create` (rt-patch, like `File`) to log/rethrow the
-   caught exception with a message, OR add `-ea`-style instrumentation, to learn whether
-   `getDeclaredMethod("values")` throws `NoSuchMethodException` (method not retained for reflection)
-   vs `invoke()` throws (can't reflectively call). The fix differs:
-   - If `getDeclaredMethod` fails → RoboVM isn't keeping enum `values()` reflection metadata. Look at
-     RoboVM `<forceLinkMethods>` (Config supports it), reflection-retention config, and whether the
-     release pipeline drops reflection info. Possibly force-retain `*.values()` for enums.
-   - If `invoke()` fails → reflective invoke isn't wired; investigate RoboVM's reflection/marshaling
-     config and known MobiVM issues.
-3. **Patch the rt to bypass reflection for enums.** If RoboVM exposes any AOT-native way to read enum
-   constants (investigate `java.lang.Class`/VM intrinsics in robovm-rt and `org.robovm.rt.*`),
-   rewrite `Enum.getSharedConstants` to use it instead of `getDeclaredMethod("values")`. This is the
-   `File` pattern applied to `Enum`. Reproducible via `build-ios.sh` (extend the rt-patch step).
-4. **Check MobiVM issues/releases** (github.com/MobiVM/robovm) for enum/EnumMap/reflection;
-   2.3.24/2.3.25 changelogs were skimmed (no obvious mention) but search the issue tracker.
+So it is **NOT** a general reflection failure, **NOT** static-visibility/generic-`Class<T>` (a literal
+`new EnumMap<>(FPref.class)` fails too), and **NOT** our de-record/rt-patch (FPref is a plain final
+enum, copied byte-for-byte; small/medium enums reflect fine). It is a **MobiVM 2.3.23 defect:
+reflective access to an enum's `values()` breaks above ~100–200 constants.** Only ~2–3 enums in all of
+Forge are this large.
 
-Whatever the fix, fold it into `scripts/build-ios.sh` (if it's an rt-patch) or `robovm.xml` so it is
-**reproducible**, and keep Forge source unchanged if at all possible.
+**Why this is good news:** the `EnumMap` blocker was the canary for "is Forge's reflection-heavy
+design compatible with RoboVM?" — and the answer is **yes**. Enum reflection, `EnumMap`,
+`getDeclaredMethod`, `invoke`, and field access all work. Only a pathological size case fails. That
+strongly implies **XStream save/load and card-script reflection will work** (they reflect on
+normal-sized game classes, not 285-member enums). The existential risk is retired.
+
+**Recommended fix — non-reflective enum-constants registry (low-risk, surgical, ~1 build):**
+1. Add a tiny registry class (e.g. on the boot classpath) `Map<Class<?>, Object[]>`.
+2. In the iOS launcher, register the oversized enums with **direct** (non-reflective) `values()` calls
+   — these compile and run fine; only *reflective* `values()` is broken:
+   `Reg.put(FPref.class, FPref.values()); Reg.put(TrackableProperty.class, TrackableProperty.values());`
+3. **rt-patch `java.lang.Enum.getSharedConstants`** (exact `File.toPath()` FilePatcher pattern in
+   `scripts/build-ios.sh`) to return `Reg.get(enumType)` when present, else fall through to the stock
+   reflective path. Surgical: only the registered (oversized) enums bypass reflection; everything else
+   is unchanged.
+4. Keep a discovery aid: when an enum >~150 constants is reached at startup and crashes the same way,
+   add it to the registration list. (Candidates are findable statically: large enums used in
+   `EnumMap`/`getEnumConstants` — grep enum bodies by constant count.)
+
+Alternatives considered and rejected: force-link / keep-alives (don't help — it's not visibility);
+a native enum accessor (MobiVM's `Class.getEnumConstants()` just calls the same reflective path, no
+shortcut); editing Forge to shrink the enums (invasive, breaks upstream sync). Also worth a look:
+whether a newer MobiVM (2.3.24+) raises the limit — but the registry fix is independent of that.
+
+The diagnostic scaffolding (`keepEnumReflection`, the `DiagPlain/DiagLinked` enums) is still in
+`Main.java` on the branch — replace it with the registry registration when implementing the fix.
 
 ---
 
-## 8. Remaining plan after the reflection wall
+## 8. Remaining plan (reflection is NOT a wall — see §7)
 
 1. **Clear reflection issues** until `Forge.create()` returns and the **main menu renders** (verify
    on-device; take a screenshot via the device or have the owner look). Expect: EnumMap → XStream →

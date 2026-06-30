@@ -28,6 +28,36 @@ import forge.interfaces.IDeviceAdapter;
 
 public class Main extends IOSApplication.Delegate {
 
+    // forge-mac: RoboVM only generates an enum's reflective values() stub when it can statically
+    // see the concrete enum class at a reflective/EnumMap site. Forge builds EnumMaps from a generic
+    // Class<T> (e.g. PreferencesStore<T> -> new EnumMap<>(clasz)), which is opaque to that analysis,
+    // so getEnumConstants()/EnumMap fail at runtime with a bare AssertionError. Touching each enum's
+    // values() reflectively HERE, with a class literal, forces RoboVM to keep the stub. Extend this
+    // list whenever a new enum is reached via a generic-Class path.
+    private static void keepEnumReflection(String docs) {
+        Class<?>[] enums = {
+            forge.localinstance.properties.ForgePreferences.FPref.class,
+            forge.localinstance.properties.ForgeNetPreferences.FNetPref.class,
+            forge.gamemodes.planarconquest.ConquestPreferences.CQPref.class,
+            forge.gamemodes.quest.data.QuestPreferences.QPref.class,
+            forge.trackable.TrackableProperty.class,
+        };
+        java.io.File log = new java.io.File(docs, "enumfix.log");
+        try (java.io.PrintWriter w = new java.io.PrintWriter(log)) {
+            for (Class<?> c : enums) {
+                // getEnumConstants() goes through Enum.getSharedConstants and populates its
+                // per-class BasicLruCache with a traceable class literal -> the later generic
+                // new EnumMap<>(clasz) reuses the cache instead of re-reflecting.
+                try { Object[] ec = c.getEnumConstants();
+                      w.println(c.getName() + " getEnumConstants: " + (ec == null ? "null" : "OK " + ec.length)); }
+                catch (Throwable t) { w.println(c.getName() + " getEnumConstants FAILED: " + t); }
+                // also exercise the exact failing op with a literal, to compare vs the generic site
+                try { new java.util.EnumMap(c); w.println(c.getName() + " EnumMap(literal): OK"); }
+                catch (Throwable t) { w.println(c.getName() + " EnumMap(literal) FAILED: " + t); }
+            }
+        } catch (Throwable ignored) {}
+    }
+
     @Override
     protected IOSApplication createApplication() {
         // forge-mac: read-only game assets (res/) are bundled INSIDE the .app, so point assetsDir
@@ -39,6 +69,8 @@ public class Main extends IOSApplication.Delegate {
         System.setProperty("forge.assetsDir", assetsDir);              // Adventure (Config.resPath)
         System.setProperty("forge.profile.userDir", docs + "data/");   // saves, decks, prefs (writable)
         System.setProperty("forge.profile.cacheDir", docs + "cache/"); // card images, music (writable)
+
+        keepEnumReflection(docs); // forge-mac: retain reflective enum values() for generic-Class EnumMap sites
 
         final boolean isTablet = UIDevice.getCurrentDevice().getUserInterfaceIdiom() == UIUserInterfaceIdiom.Pad;
         final CGRect bounds = UIScreen.getMainScreen().getBounds();
