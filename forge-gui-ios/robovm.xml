@@ -17,6 +17,11 @@
       <directory>res</directory>
     </resource>
   </resources>
+  <!-- forge-mac: provide java.lang.management.* (absent from MobiVM's iOS runtime) so tinylog can
+       initialize. java.* must be on the boot classpath; a regular dependency is ignored for it. -->
+  <bootclasspath>
+    <classpathentry>libs/management-stub.jar</classpathentry>
+  </bootclasspath>
   <target>ios</target>
   <iosInfoPList>Info.plist.xml</iosInfoPList>
   <forceLinkClasses>

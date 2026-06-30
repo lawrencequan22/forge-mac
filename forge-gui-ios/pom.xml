@@ -169,5 +169,14 @@
             <artifactId>gdx-backend-robovm</artifactId>
             <version>1.13.5</version>
         </dependency>
+        <!-- forge-mac: minimal java.lang.management stub (absent from MobiVM's iOS runtime) so
+             tinylog's RuntimeProvider can initialize. Source in stubs/; jar built once. -->
+        <dependency>
+            <groupId>forge-mac</groupId>
+            <artifactId>management-stub</artifactId>
+            <version>1.0</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/libs/management-stub.jar</systemPath>
+        </dependency>
     </dependencies>
 </project>
