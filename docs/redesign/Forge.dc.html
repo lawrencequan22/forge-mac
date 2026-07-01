@@ -1,0 +1,1005 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style data-omelette-injected>html,body{background:transparent}</style><script data-omelette-injected>(()=>{var j=[];var x=false;var S=30000;var f=3000;document.addEventListener("DOMContentLoaded",()=>{const H=window.Babel;const G="om-src-id";if(H&&H.registerPlugin&&!(H.availablePlugins&&H.availablePlugins[G])){H.registerPlugin(G,({types:Y})=>({visitor:{JSXOpeningElement(U,Q){const J=U.node;if(J.name&&J.name.type==="JSXMemberExpression")return;for(let V=0;V<J.attributes.length;V++){const L=J.attributes[V];if(L.type==="JSXAttribute"&&L.name&&L.name.name==="data-om-id")return}const W=Q.file&&Q.file.opts&&Q.file.opts.filename||"?";const Z=J.loc&&J.loc.start;const z=`jsx:${W}:${J.start??0}:${Z?Z.line:0}:${Z?Z.column+1:0}`;J.attributes.push(Y.jsxAttribute(Y.jsxIdentifier("data-om-id"),Y.stringLiteral(z)))}}}))}const k="om-text-extract";let A=false;if(x&&H&&H.registerPlugin&&!(H.availablePlugins&&H.availablePlugins[k])){const Y=window.React;if(Y&&Y.useSyncExternalStore&&Y.createElement){A=true;const U={};const Q=new Set;let J=0;window.__omTextO=U;window.__omTextSet=(z)=>{for(const V in z){const L=z[V];if(L==null)delete U[V];else U[V]=L}J++;Q.forEach((V)=>V())};const W=(z)=>{Q.add(z);return()=>Q.delete(z)};const Z=()=>J;window.__OmT=function z(V){Y.useSyncExternalStore(W,Z,Z);return Y.createElement("span",{"data-om-text":V.i,className:"__om-t"},V.i in U?U[V.i]:V.children)};H.registerPlugin(k,({types:z})=>{const V={style:1,script:1,noscript:1,textarea:1,title:1,option:1,text:1,tspan:1,textPath:1};const L={placeholder:1,alt:1,title:1,label:1,"aria-label":1,"aria-description":1,"aria-placeholder":1};const _=($,C)=>z.logicalExpression("??",z.memberExpression(z.logicalExpression("||",z.memberExpression(z.identifier("window"),z.identifier("__omTextO")),z.objectExpression([])),z.stringLiteral($),true),C);const E=($)=>$.file&&$.file.opts&&$.file.opts.filename||"?";const B=($)=>$.file&&$.file.code||"";const b=($,C)=>{const X=(F)=>F&&F.start!=null&&F.end!=null&&(F.type==="StringLiteral"||F.type==="TemplateLiteral"&&F.expressions.length===0)?[F.start,F.end]:null;const N=X(C);if(N)return N;if(C&&C.type==="Identifier"){const F=$.scope.getBinding(C.name);if(F&&F.constant&&F.path.node.type==="VariableDeclarator"){return X(F.path.node.init)}}return null};const M=($,C,X)=>{const N=$.node;let F=false;const w=(K,q)=>{F=true;return z.jsxElement(z.jsxOpeningElement(z.jsxIdentifier("__OmT"),[z.jsxAttribute(z.jsxIdentifier("i"),z.stringLiteral(K))],false),z.jsxClosingElement(z.jsxIdentifier("__OmT")),[q],false)};const D=N.children.map((K)=>{if(K.type==="JSXText"){if(K.start==null||K.end==null)return K;const q=X.slice(K.start,K.end);const R=q.length-q.trimStart().length;const m=q.length-q.trimEnd().length;if(R+m>=q.length)return K;return w(`txt:${C}:${K.start+R}:${K.end-m}`,K)}if(K.type==="JSXExpressionContainer"){const q=b($,K.expression);if(q)return w(`str:${C}:${q[0]}:${q[1]}`,K)}return K});if(F)N.children=D};return{visitor:{JSXOpeningElement($,C){const X=$.node;const N=E(C);const F={};for(let w=0;w<X.attributes.length;w++){const D=X.attributes[w];if(D.type!=="JSXAttribute"||!D.name)continue;const K=D.name.name;if(!L[K])continue;if(!D.value||D.value.type!=="StringLiteral")continue;if(D.value.start==null||D.value.end==null)continue;const q=`txt:${N}:${D.value.start}:${D.value.end}`;F[K]=q;D.value=z.jsxExpressionContainer(_(q,z.stringLiteral(D.value.value)))}if(Object.keys(F).length){X.attributes.push(z.jsxAttribute(z.jsxIdentifier("data-om-text-attrs"),z.stringLiteral(JSON.stringify(F))))}},JSXElement($,C){const X=$.node.openingElement;const N=X&&X.name&&X.name.name;if(N==="__OmT")return;if(typeof N==="string"&&V[N])return;M($,E(C),B(C))},JSXFragment($,C){M($,E(C),B(C))}}}})}}const u=A?["transform-react-jsx-source",G,k]:["transform-react-jsx-source",G];document.querySelectorAll('script[type="text/babel"],script[type="text/jsx"]').forEach((Y,U)=>{const Q=Y.getAttribute("data-plugins")||"";const J=u.filter((W)=>Q.indexOf(W)<0);if(J.length){Y.setAttribute("data-plugins",Q?`${Q},${J.join(",")}`:J.join(","))}if(!Y.hasAttribute("data-filename")){Y.setAttribute("data-filename",Y.getAttribute("src")||`inline-${U}`)}})});var y=window.parent;if(y&&y!==window){const H=(Q,J)=>{try{y.postMessage({__omelette_log:true,type:Q,data:J},"*")}catch{}};["log","warn","error"].forEach((Q)=>{const J=console[Q];console[Q]=(...W)=>{const Z=W.map((z)=>{try{return typeof z==="object"?JSON.stringify(z):String(z)}catch{try{return String(z)}catch{return"[unstringifiable]"}}}).join(" ");H(Q,Z);J.apply(console,W)}});window.addEventListener("error",(Q)=>{const J=Q.target;if(J&&J!==window&&J.tagName){const W=J.src||J.href||"";H("resource_error",`${J.tagName} failed to load: ${W}`)}else{H("error",`${Q.message||"Unknown error"} at ${Q.filename||"?"}:${Q.lineno||0}:${Q.colno||0}`)}},true);window.addEventListener("unhandledrejection",(Q)=>{const J=Q.reason;const W=J instanceof Error?`${J.message} ${J.stack}`:String(J);H("error",`Unhandled rejection: ${W}`)});const G=()=>{try{y.postMessage({type:"omelette:height",height:document.documentElement.scrollHeight},"*")}catch{}};if(document.readyState==="complete")G();else window.addEventListener("load",G);if(window.ResizeObserver)new ResizeObserver(G).observe(document.documentElement);const k={};let A=0;window.claude={complete(Q){return new Promise((J,W)=>{if(!j.length){W(new Error("claude.complete: no parent origin"));return}const Z=`c${++A}`;const z=()=>setTimeout(()=>{delete k[Z];W(new Error(`claude.complete: no data for ${S/1000}s`))},S);const V=z();k[Z]={resolve:J,reject:W,text:"",t:V,arm:z};try{for(const L of j){y.postMessage({__om_api:true,id:Z,body:Q},L)}}catch(L){clearTimeout(V);delete k[Z];W(L)}})}};const u={};let Y=0;window.omelette={writeFile:(Q,J)=>new Promise((W,Z)=>{if(!j.length){W();return}const z=`f${++Y}`;const V=setTimeout(()=>{delete u[z];W()},f);u[z]={resolve:W,reject:Z,t:V};try{for(const L of j){y.postMessage({__om_file:true,id:z,op:"write",path:Q,content:J},L)}}catch{clearTimeout(V);delete u[z];W()}})};const U=(Q)=>{try{return JSON.stringify(Q)}catch{return JSON.stringify(String(Q))}};window.addEventListener("message",(Q)=>{if(j.indexOf(Q.origin)<0)return;if(Q.source!==y)return;const J=Q.data;if(!J)return;if(J.type==="omelette-preview-refresh"){if(typeof J.token!=="string"||!/^[0-9a-f.-]+(\.(rc|pr-[0-9]+))?(\.[0-9]+\.[0-9a-f]{16})?$/.test(J.token))return;const z=Math.max(1,Math.floor((J.expiresAt||0)-Date.now()/1000));document.cookie="__Host-omelette-preview="+J.token+"; Path=/; Secure; SameSite=None; Partitioned; Max-Age="+z;return}if(J.__om_file_r){const z=u[J.id];if(!z)return;clearTimeout(z.t);delete u[J.id];if(J.ok)z.resolve();else z.reject(new Error(J.error||"write failed"));return}if(J.__om_api_r){const z=k[J.id];if(!z)return;if(J.error!=null){clearTimeout(z.t);delete k[J.id];z.reject(new Error(J.error));return}if(J.chunk!=null){clearTimeout(z.t);z.t=z.arm();z.text+=J.chunk;return}if(J.done){clearTimeout(z.t);delete k[J.id];z.resolve(J.text!=null?J.text:z.text);return}return}if(!J.__om_eval)return;const W=J;const Z=(z)=>{Q.source.postMessage({...z,__om_eval_r:1,id:W.id},Q.origin)};try{const z=(0,eval)(W.code);if(z&&typeof z.then==="function"){z.then((V)=>Z({ok:1,v:U(V)}),(V)=>Z({ok:0,e:String(V)}))}else{Z({ok:1,v:U(z)})}}catch(z){Z({ok:0,e:String(z)})}})}})();
+</script>
+
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Sora:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #0d0c0a; --bg2: #131109; --panel: #1a1710; --panel2: #221e15; --raise: #2b2619;
+    --line: rgba(217,180,95,0.14); --line2: rgba(255,255,255,0.06);
+    --text: #ece6d6; --dim: #a99f88; --mute: #6f6857;
+    --gold: #d9b45f; --gold-b: #f2d78f; --gold-d: #7c6224;
+    --w: #efe4c2; --u: #5a97dd; --b: #9a78c4; --r: #db5c48; --g: #5fb06f;
+    --shadow: 0 24px 60px -20px rgba(0,0,0,0.7);
+    --art: repeating-linear-gradient(128deg, rgba(255,255,255,0.028) 0 7px, rgba(255,255,255,0.06) 7px 14px);
+    --card-bg: linear-gradient(160deg,#211d14,#15120b);
+  }
+  :root[data-theme='light'] {
+    --bg: #e6ddc8; --bg2: #efe7d3; --panel: #f6efdd; --panel2: #efe6d0; --raise: #e7dcc0;
+    --line: rgba(124,98,36,0.22); --line2: rgba(60,45,20,0.08);
+    --text: #2b2418; --dim: #6b5f47; --mute: #94886c;
+    --gold: #9c7a2b; --gold-b: #c39a3d; --gold-d: #7c6224;
+    --w: #b8a35f; --u: #3f78c0; --b: #7a58a6; --r: #c14631; --g: #3f8f52;
+    --shadow: 0 24px 60px -24px rgba(90,70,30,0.35);
+    --art: repeating-linear-gradient(128deg, rgba(80,60,20,0.05) 0 7px, rgba(80,60,20,0.09) 7px 14px);
+    --card-bg: linear-gradient(160deg,#f3ead4,#e7dcbf);
+  }
+  body { background: var(--bg); }
+  ::-webkit-scrollbar { width: 9px; height: 9px; }
+  ::-webkit-scrollbar-thumb { background: var(--line); border-radius: 10px; border: 2px solid transparent; background-clip: padding-box; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--gold-d); background-clip: padding-box; }
+  @keyframes pulseRing { 0%,100% { box-shadow: 0 0 0 0 rgba(217,180,95,0.35); } 50% { box-shadow: 0 0 0 6px rgba(217,180,95,0); } }
+</style>
+</helmet>
+<div style="height:100vh; width:100%; display:flex; overflow:hidden; background:radial-gradient(120% 90% at 82% -10%, rgba(217,180,95,0.07), transparent 55%), var(--bg); color:var(--text); font-family:'Sora',sans-serif; -webkit-font-smoothing:antialiased;">
+
+  <aside style="width:238px; flex:none; display:flex; flex-direction:column; background:linear-gradient(180deg,var(--bg2),var(--bg)); border-right:1px solid var(--line); position:relative; z-index:5;">
+    <div style="padding:22px 22px 16px; display:flex; align-items:center; gap:12px; flex:none;">
+      <div style="width:32px; height:32px; flex:none; transform:rotate(45deg); background:linear-gradient(135deg,var(--gold-b),var(--gold-d)); border:1px solid var(--gold-b); box-shadow:0 4px 16px -4px rgba(217,180,95,0.6);"></div>
+      <div>
+        <div style="font-family:'Cinzel',serif; font-weight:700; letter-spacing:0.22em; font-size:18px; line-height:1; color:var(--gold-b);">FORGE</div>
+        <div style="font-size:8.5px; letter-spacing:0.32em; color:var(--mute); margin-top:4px; text-transform:uppercase;">Rules Engine</div>
+      </div>
+    </div>
+
+    <nav style="flex:1; min-height:0; overflow-y:auto; padding:6px 12px 12px;">
+      <sc-for list="{{ navGroups }}" as="g" hint-placeholder-count="5">
+        <sc-if value="{{ g.hasTitle }}" hint-placeholder-val="{{ true }}">
+          <div onClick="{{ g.onToggle }}" style="display:flex; align-items:center; gap:8px; padding:14px 10px 6px 12px; cursor:pointer;" style-hover="color:var(--dim)">
+            <span style="flex:1; font-size:9px; letter-spacing:0.2em; text-transform:uppercase; color:var(--mute);">{{ g.title }}</span>
+            <span style="font-size:10px; color:var(--mute); transform:rotate({{ g.chev }}); transition:transform .18s;">▸</span>
+          </div>
+        </sc-if>
+        <sc-if value="{{ g.open }}" hint-placeholder-val="{{ true }}">
+        <sc-for list="{{ g.items }}" as="item" hint-placeholder-count="3">
+          <div onClick="{{ item.onClick }}" style="position:relative; display:flex; align-items:center; gap:11px; padding:8px 13px; border-radius:9px; cursor:pointer; background:{{ item.bg }}; transition:background .16s;" style-hover="background:var(--panel)">
+            <span style="width:6px; height:6px; flex:none; transform:rotate(45deg); background:{{ item.mark }};"></span>
+            <span style="font-size:12.5px; font-weight:{{ item.weight }}; letter-spacing:0.01em; color:{{ item.color }}; white-space:nowrap;">{{ item.label }}</span>
+            <sc-if value="{{ item.active }}" hint-placeholder-val="{{ true }}"><span style="position:absolute; left:0; top:50%; transform:translateY(-50%); width:3px; height:18px; border-radius:3px; background:var(--gold-b);"></span></sc-if>
+          </div>
+        </sc-for>
+        </sc-if>
+      </sc-for>
+    </nav>
+
+    <div style="flex:none; padding:12px 14px 16px;">
+      <div style="height:1px; background:var(--line); margin-bottom:12px;"></div>
+      <div onClick="{{ goAvatars }}" style="display:flex; align-items:center; gap:11px; padding:7px 6px; border-radius:10px; cursor:pointer;" style-hover="background:var(--panel)">
+        <div style="width:38px; height:38px; flex:none; border-radius:11px; background:var(--art), linear-gradient(140deg,var(--b),var(--u)); border:1px solid var(--line);"></div>
+        <div style="min-width:0;">
+          <div style="font-size:12.5px; font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">Planeswalker</div>
+          <div style="font-size:10.5px; color:var(--gold); letter-spacing:0.03em;">Avatars &amp; Profile ▸</div>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <main style="flex:1; min-width:0; display:flex; flex-direction:column; overflow:hidden;">
+    <header style="height:64px; flex:none; display:flex; align-items:center; gap:18px; padding:0 28px; border-bottom:1px solid var(--line); background:linear-gradient(180deg,var(--bg2),transparent);">
+      <div style="font-family:'Cinzel',serif; font-size:15px; font-weight:600; letter-spacing:0.13em; text-transform:uppercase; color:var(--text);">{{ headerTitle }}</div>
+      <div style="flex:1;"></div>
+      <div style="display:flex; align-items:center; gap:10px; height:37px; padding:0 13px; border-radius:10px; background:var(--panel); border:1px solid var(--line); width:220px;">
+        <span style="width:12px; height:12px; border-radius:50%; border:1.5px solid var(--mute); flex:none;"></span>
+        <input placeholder="Search cards, decks, sets…" style="flex:1; min-width:0; background:transparent; border:none; outline:none; color:var(--text); font-family:'Sora'; font-size:12.5px;"/>
+      </div>
+      <div onClick="{{ toggleTheme }}" style="display:flex; align-items:center; gap:5px; height:37px; padding:4px; border-radius:10px; background:var(--panel); border:1px solid var(--line); cursor:pointer;">
+        <span style="width:29px; height:29px; border-radius:8px; display:grid; place-items:center; font-size:13px; background:{{ darkBtn }}; color:{{ darkCol }};">☾</span>
+        <span style="width:29px; height:29px; border-radius:8px; display:grid; place-items:center; font-size:13px; background:{{ lightBtn }}; color:{{ lightCol }};">☀</span>
+      </div>
+    </header>
+
+    <section style="flex:1; min-height:0; overflow-y:auto; overflow-x:hidden;">
+
+      <!-- ============ HOME ============ -->
+      <sc-if value="{{ isHome }}" hint-placeholder-val="{{ true }}">
+      <div style="padding:28px 32px 44px; max-width:1460px;">
+        <div style="position:relative; border-radius:22px; overflow:hidden; border:1px solid var(--line); background:var(--card-bg); box-shadow:var(--shadow); min-height:270px; display:flex;">
+          <div style="position:absolute; inset:0; background:var(--art);"></div>
+          <div style="position:absolute; inset:0; background:radial-gradient(90% 130% at 88% 20%, rgba(154,120,196,0.34), transparent 60%), linear-gradient(90deg, rgba(13,12,10,0.94) 30%, rgba(13,12,10,0.2) 75%);"></div>
+          <div style="position:relative; padding:38px 42px; display:flex; flex-direction:column; justify-content:center; max-width:600px;">
+            <div style="display:inline-flex; align-self:flex-start; align-items:center; gap:8px; padding:6px 13px; border-radius:100px; background:rgba(217,180,95,0.12); border:1px solid var(--line); font-size:10px; letter-spacing:0.2em; text-transform:uppercase; color:var(--gold-b); margin-bottom:16px;">◆ Quest · Continue Campaign</div>
+            <div style="font-family:'Cinzel',serif; font-size:40px; line-height:1.02; font-weight:700; color:var(--text); letter-spacing:0.01em;">The Shadowmoor Gambit</div>
+            <div style="font-size:14px; color:var(--dim); margin-top:13px; line-height:1.6; max-width:440px;">Resume your quest — battle tuned AI, earn credits, and grow your collection across a persistent campaign.</div>
+            <div style="display:flex; gap:12px; margin-top:24px;">
+              <button onClick="{{ goQuest }}" style="display:inline-flex; align-items:center; gap:10px; height:46px; padding:0 26px; border:none; border-radius:12px; cursor:pointer; font-family:'Sora'; font-weight:600; font-size:14px; color:#1c1608; background:linear-gradient(150deg,var(--gold-b),var(--gold)); box-shadow:0 12px 28px -10px rgba(217,180,95,0.6);" style-hover="filter:brightness(1.06)">▸ Resume Quest</button>
+              <button onClick="{{ goQuest }}" style="height:46px; padding:0 22px; border-radius:12px; cursor:pointer; font-family:'Sora'; font-weight:500; font-size:14px; color:var(--text); background:var(--panel2); border:1px solid var(--line);" style-hover="border-color:var(--gold-d)">Spell Shop</button>
+            </div>
+          </div>
+        </div>
+
+        <div style="display:flex; align-items:baseline; justify-content:space-between; margin:34px 2px 16px;">
+          <div style="font-family:'Cinzel',serif; font-size:16px; font-weight:600; letter-spacing:0.1em; text-transform:uppercase;">Game Modes</div>
+        </div>
+        <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:15px;">
+          <sc-for list="{{ modes }}" as="m" hint-placeholder-count="8">
+            <div onClick="{{ m.onClick }}" style="position:relative; border-radius:15px; overflow:hidden; border:1px solid var(--line); background:var(--card-bg); cursor:pointer; min-height:150px; display:flex; flex-direction:column; justify-content:flex-end; transition:transform .18s, border-color .18s;" style-hover="transform:translateY(-4px); border-color:var(--gold-d)">
+              <div style="position:absolute; inset:0; background:var(--art);"></div>
+              <div style="position:absolute; inset:0; background:linear-gradient(180deg, transparent 28%, rgba(10,9,7,0.9)), radial-gradient(80% 70% at 80% 12%, {{ m.glow }}, transparent 62%);"></div>
+              <div style="position:relative; padding:15px 15px 14px;">
+                <div style="font-size:9px; letter-spacing:0.18em; text-transform:uppercase; color:{{ m.accent }}; font-weight:600;">{{ m.tag }}</div>
+                <div style="font-family:'Cinzel',serif; font-size:17px; font-weight:600; margin-top:5px; color:var(--text);">{{ m.name }}</div>
+                <div style="font-size:11px; color:var(--dim); margin-top:5px; line-height:1.4;">{{ m.desc }}</div>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+
+        <div style="display:grid; grid-template-columns:1.55fr 1fr; gap:22px; margin-top:32px;">
+          <div>
+            <div style="font-family:'Cinzel',serif; font-size:14px; font-weight:600; letter-spacing:0.1em; text-transform:uppercase; margin:0 2px 14px;">Recent Decks</div>
+            <div style="display:flex; flex-direction:column; gap:10px;">
+              <sc-for list="{{ recentDecks }}" as="d" hint-placeholder-count="3">
+                <div onClick="{{ goDecks }}" style="display:flex; align-items:center; gap:16px; padding:12px 16px; border-radius:14px; background:var(--panel); border:1px solid var(--line); cursor:pointer;" style-hover="background:var(--panel2)">
+                  <div style="width:42px; height:42px; flex:none; border-radius:10px; background:var(--art), {{ d.grad }}; border:1px solid var(--line2);"></div>
+                  <div style="flex:1; min-width:0;">
+                    <div style="font-size:13.5px; font-weight:600;">{{ d.name }}</div>
+                    <div style="font-size:11px; color:var(--mute); margin-top:3px;">{{ d.meta }}</div>
+                  </div>
+                  <div style="display:flex; gap:4px;">
+                    <sc-for list="{{ d.pips }}" as="p" hint-placeholder-count="2"><span style="width:15px; height:15px; border-radius:50%; background:{{ p }}; border:1px solid rgba(0,0,0,0.25);"></span></sc-for>
+                  </div>
+                  <div style="font-size:11.5px; color:var(--dim); width:56px; text-align:right;">{{ d.count }}</div>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+          <div>
+            <div style="font-family:'Cinzel',serif; font-size:14px; font-weight:600; letter-spacing:0.1em; text-transform:uppercase; margin:0 2px 14px;">Release Notes</div>
+            <div style="border-radius:16px; background:var(--panel); border:1px solid var(--line); overflow:hidden;">
+              <sc-for list="{{ news }}" as="n" hint-placeholder-count="3">
+                <div onClick="{{ goNotes }}" style="padding:14px 17px; border-bottom:1px solid var(--line2); cursor:pointer;" style-hover="background:var(--panel2)">
+                  <div style="font-size:9.5px; letter-spacing:0.15em; text-transform:uppercase; color:var(--gold);">{{ n.tag }}</div>
+                  <div style="font-size:13px; font-weight:500; margin-top:5px; line-height:1.4;">{{ n.title }}</div>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+        </div>
+      </div>
+      </sc-if>
+
+      <!-- ============ PLAY / LOBBY ============ -->
+      <sc-if value="{{ isPlay }}" hint-placeholder-val="{{ true }}">
+      <div style="padding:24px 32px 40px;">
+        <div style="display:flex; gap:6px; margin-bottom:22px; border-bottom:1px solid var(--line);">
+          <sc-for list="{{ formats }}" as="f" hint-placeholder-count="4">
+            <div onClick="{{ f.onClick }}" style="padding:11px 20px; font-size:13px; font-weight:{{ f.weight }}; color:{{ f.color }}; cursor:pointer; position:relative; letter-spacing:0.02em;">
+              {{ f.name }}
+              <sc-if value="{{ f.active }}" hint-placeholder-val="{{ true }}"><span style="position:absolute; left:14px; right:14px; bottom:-1px; height:2px; background:var(--gold-b); border-radius:2px;"></span></sc-if>
+            </div>
+          </sc-for>
+        </div>
+
+        <div style="display:grid; grid-template-columns:1.55fr 0.85fr; gap:18px; align-items:start;">
+          <div style="border-radius:16px; background:var(--panel); border:1px solid var(--line); padding:20px;">
+            <div style="display:flex; align-items:baseline; justify-content:space-between; margin-bottom:14px;">
+              <span style="font-family:'Cinzel',serif; font-size:12px; letter-spacing:0.12em; text-transform:uppercase; color:var(--dim);">Players</span>
+              <span style="font-size:11.5px; color:var(--mute);">{{ playerCount }} / 8 seats</span>
+            </div>
+            <div style="display:flex; flex-direction:column; gap:10px;">
+              <sc-for list="{{ players }}" as="p" hint-placeholder-count="2">
+                <div style="border-radius:13px; background:var(--panel2); border:1px solid {{ p.border }}; overflow:hidden;">
+                  <div style="display:flex; align-items:center; gap:13px; padding:12px 14px;">
+                    <div style="width:40px; height:40px; flex:none; border-radius:11px; background:var(--art), {{ p.grad }}; border:1px solid var(--line2); position:relative;">
+                      <span style="position:absolute; bottom:-4px; right:-4px; width:17px; height:17px; border-radius:50%; display:grid; place-items:center; font-size:9px; font-weight:700; color:#1c1608; background:{{ p.badgeBg }}; border:2px solid var(--panel2);">{{ p.badge }}</span>
+                    </div>
+                    <div style="flex:1; min-width:0;">
+                      <input value="{{ p.name }}" onChange="{{ p.onName }}" style="width:100%; background:transparent; border:none; outline:none; font-size:13.5px; font-weight:600; color:var(--text); font-family:'Sora';"/>
+                      <div onClick="{{ p.onDeck }}" style="display:inline-flex; align-items:center; gap:7px; margin-top:2px; cursor:pointer;">
+                        <span style="font-size:11.5px; color:var(--gold);">{{ p.deck }}</span>
+                        <span style="display:flex; gap:2px;"><sc-for list="{{ p.pips }}" as="pip" hint-placeholder-count="1"><span style="width:10px; height:10px; border-radius:50%; background:{{ pip }};"></span></sc-for></span>
+                        <span style="font-size:8px; color:var(--mute); transform:rotate({{ p.chev }}); display:inline-block;">▸</span>
+                      </div>
+                    </div>
+                    <div style="display:flex; gap:3px; padding:3px; border-radius:9px; background:var(--bg2); border:1px solid var(--line2);">
+                      <div onClick="{{ p.setHuman }}" style="padding:6px 11px; border-radius:6px; font-size:10.5px; font-weight:500; cursor:pointer; color:{{ p.humanCol }}; background:{{ p.humanBg }};">Human</div>
+                      <div onClick="{{ p.setAI }}" style="padding:6px 11px; border-radius:6px; font-size:10.5px; font-weight:500; cursor:pointer; color:{{ p.aiCol }}; background:{{ p.aiBg }};">AI</div>
+                    </div>
+                    <sc-if value="{{ p.removable }}" hint-placeholder-val="{{ true }}">
+                      <div onClick="{{ p.onRemove }}" style="width:28px; height:28px; flex:none; border-radius:8px; display:grid; place-items:center; cursor:pointer; color:var(--mute); background:var(--bg2); border:1px solid var(--line2); font-size:16px; line-height:1;" style-hover="color:var(--r); border-color:var(--r)">×</div>
+                    </sc-if>
+                  </div>
+                  <sc-if value="{{ p.menuOpen }}" hint-placeholder-val="{{ true }}">
+                    <div style="padding:2px 10px 10px; display:flex; flex-direction:column; gap:2px;">
+                      <div style="font-size:9px; letter-spacing:0.14em; text-transform:uppercase; color:var(--mute); padding:6px 10px 4px;">Select deck</div>
+                      <sc-for list="{{ p.deckMenu }}" as="d" hint-placeholder-count="4">
+                        <div onClick="{{ d.onClick }}" style="display:flex; align-items:center; gap:9px; padding:8px 10px; border-radius:8px; cursor:pointer; font-size:12px; color:{{ d.color }}; background:{{ d.bg }};" style-hover="background:var(--panel)">
+                          <span style="flex:1;">{{ d.name }}</span>
+                          <span style="display:flex; gap:2px;"><sc-for list="{{ d.pips }}" as="pip" hint-placeholder-count="1"><span style="width:9px; height:9px; border-radius:50%; background:{{ pip }};"></span></sc-for></span>
+                        </div>
+                      </sc-for>
+                    </div>
+                  </sc-if>
+                </div>
+              </sc-for>
+            </div>
+            <div style="display:flex; gap:10px; margin-top:12px;">
+              <button onClick="{{ addPlayer }}" style="flex:1; height:40px; border-radius:11px; cursor:pointer; background:transparent; border:1px dashed var(--line); color:{{ addCol }}; font-family:'Sora'; font-size:12.5px;" style-hover="border-color:var(--gold-d); color:var(--gold)">＋ Add Player</button>
+              <button onClick="{{ goDecks }}" style="flex:none; padding:0 16px; height:40px; border-radius:11px; cursor:pointer; background:var(--panel2); border:1px solid var(--line); color:var(--dim); font-family:'Sora'; font-size:12.5px;" style-hover="color:var(--gold)">Deck Editor</button>
+            </div>
+          </div>
+
+          <div style="border-radius:16px; background:linear-gradient(180deg,var(--panel2),var(--panel)); border:1px solid var(--line); padding:20px; position:sticky; top:0;">
+            <div style="font-family:'Cinzel',serif; font-size:12px; letter-spacing:0.12em; text-transform:uppercase; color:var(--dim); margin-bottom:14px;">Variants</div>
+            <div style="display:flex; flex-wrap:wrap; gap:7px; margin-bottom:20px;">
+              <sc-for list="{{ variants }}" as="v" hint-placeholder-count="6">
+                <div onClick="{{ v.onClick }}" style="padding:7px 12px; border-radius:100px; font-size:11px; cursor:pointer; color:{{ v.color }}; background:{{ v.bg }}; border:1px solid {{ v.border }};">{{ v.name }}</div>
+              </sc-for>
+            </div>
+            <div style="display:flex; gap:12px; margin-bottom:20px;">
+              <div style="flex:1;">
+                <div style="font-size:11px; color:var(--dim); margin-bottom:8px;">Starting Life</div>
+                <div style="display:flex; align-items:center; border-radius:10px; overflow:hidden; border:1px solid var(--line);">
+                  <div onClick="{{ lifeDown }}" style="width:34px; height:38px; display:grid; place-items:center; cursor:pointer; background:var(--panel); font-size:17px; color:var(--dim);">–</div>
+                  <div style="flex:1; text-align:center; font-size:16px; font-weight:600; color:var(--gold-b);">{{ life }}</div>
+                  <div onClick="{{ lifeUp }}" style="width:34px; height:38px; display:grid; place-items:center; cursor:pointer; background:var(--panel); font-size:17px; color:var(--dim);">+</div>
+                </div>
+              </div>
+              <div style="flex:1;">
+                <div style="font-size:11px; color:var(--dim); margin-bottom:8px;">Games</div>
+                <div style="display:flex; gap:6px;">
+                  <sc-for list="{{ bestOf }}" as="b" hint-placeholder-count="3">
+                    <div onClick="{{ b.onClick }}" style="flex:1; text-align:center; padding:10px 0; border-radius:9px; font-size:12px; cursor:pointer; color:{{ b.color }}; background:{{ b.bg }}; border:1px solid {{ b.border }};">{{ b.name }}</div>
+                  </sc-for>
+                </div>
+              </div>
+            </div>
+            <div style="height:1px; background:var(--line); margin-bottom:16px;"></div>
+            <div style="display:flex; flex-direction:column; gap:10px; font-size:12.5px; margin-bottom:18px;">
+              <div style="display:flex; justify-content:space-between;"><span style="color:var(--mute);">Format</span><span style="font-weight:500;">{{ mode }}</span></div>
+              <div style="display:flex; justify-content:space-between;"><span style="color:var(--mute);">Players</span><span style="font-weight:500;">{{ playerCount }}</span></div>
+              <div style="display:flex; justify-content:space-between; gap:10px;"><span style="color:var(--mute); flex:none;">Variants</span><span style="font-weight:500; text-align:right;">{{ variantSummary }}</span></div>
+            </div>
+            <button onClick="{{ goBattle }}" style="width:100%; height:50px; border:none; border-radius:13px; cursor:pointer; font-family:'Cinzel',serif; font-weight:600; font-size:15px; letter-spacing:0.08em; color:#1c1608; background:linear-gradient(150deg,var(--gold-b),var(--gold)); box-shadow:0 14px 30px -12px rgba(217,180,95,0.6);" style-hover="filter:brightness(1.06)">START GAME</button>
+          </div>
+        </div>
+      </div>
+      </sc-if>
+
+      <!-- ============ QUEST ============ -->
+      <sc-if value="{{ isQuest }}" hint-placeholder-val="{{ true }}">
+      <div style="padding:24px 32px 40px;">
+        <div style="display:flex; align-items:center; gap:22px; padding:18px 22px; border-radius:16px; background:linear-gradient(120deg,var(--panel2),var(--panel)); border:1px solid var(--line); margin-bottom:22px;">
+          <div style="width:52px; height:52px; flex:none; border-radius:13px; background:var(--art), linear-gradient(140deg,var(--b),var(--g)); border:1px solid var(--line);"></div>
+          <div style="flex:1;">
+            <div style="display:flex; align-items:center; gap:10px;">
+              <div style="font-family:'Cinzel',serif; font-size:18px; font-weight:600;">The Shadowmoor Gambit</div>
+              <span style="padding:3px 10px; border-radius:100px; font-size:10px; letter-spacing:0.1em; text-transform:uppercase; color:var(--r); background:rgba(219,92,72,0.14); border:1px solid rgba(219,92,72,0.3);">Hard</span>
+            </div>
+            <div style="font-size:12px; color:var(--mute); margin-top:4px;">Rank 12 · Spellslinger</div>
+          </div>
+          <sc-for list="{{ questStats }}" as="s" hint-placeholder-count="4">
+            <div style="text-align:center; padding:0 14px; border-left:1px solid var(--line);">
+              <div style="font-size:19px; font-weight:700; color:{{ s.color }}; font-family:'Cinzel',serif;">{{ s.value }}</div>
+              <div style="font-size:9.5px; letter-spacing:0.12em; text-transform:uppercase; color:var(--mute); margin-top:3px;">{{ s.label }}</div>
+            </div>
+          </sc-for>
+        </div>
+
+        <div style="display:grid; grid-template-columns:1.6fr 1fr; gap:18px; align-items:start;">
+          <div>
+            <div style="display:flex; align-items:baseline; justify-content:space-between; margin:0 2px 14px;">
+              <div style="font-family:'Cinzel',serif; font-size:14px; font-weight:600; letter-spacing:0.1em; text-transform:uppercase;">Duels</div>
+              <div style="font-size:11.5px; color:var(--gold); cursor:pointer;" onClick="{{ goPlay }}">Quest Draft ▸</div>
+            </div>
+            <div style="display:flex; flex-direction:column; gap:10px;">
+              <sc-for list="{{ duels }}" as="d" hint-placeholder-count="4">
+                <div onClick="{{ goBattle }}" style="display:flex; align-items:center; gap:16px; padding:13px 16px; border-radius:14px; background:var(--panel); border:1px solid var(--line); cursor:pointer;" style-hover="border-color:var(--gold-d)">
+                  <div style="width:46px; height:46px; flex:none; border-radius:11px; background:var(--art), {{ d.grad }}; border:1px solid var(--line2);"></div>
+                  <div style="flex:1; min-width:0;">
+                    <div style="font-size:13.5px; font-weight:600;">{{ d.name }}</div>
+                    <div style="font-size:11px; color:var(--mute); margin-top:3px;">{{ d.deck }}</div>
+                  </div>
+                  <div style="text-align:right;">
+                    <div style="font-size:11px; color:{{ d.diffColor }};">{{ d.diff }}</div>
+                    <div style="font-size:12px; color:var(--gold); margin-top:3px;">◇ {{ d.reward }}</div>
+                  </div>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+          <div>
+            <div style="font-family:'Cinzel',serif; font-size:14px; font-weight:600; letter-spacing:0.1em; text-transform:uppercase; margin:0 2px 14px;">Challenges</div>
+            <div style="border-radius:16px; background:var(--panel); border:1px solid var(--line); overflow:hidden; margin-bottom:16px;">
+              <sc-for list="{{ challenges }}" as="c" hint-placeholder-count="3">
+                <div style="padding:14px 16px; border-bottom:1px solid var(--line2); cursor:pointer;" style-hover="background:var(--panel2)">
+                  <div style="display:flex; justify-content:space-between; align-items:center;">
+                    <span style="font-size:13px; font-weight:600;">{{ c.name }}</span>
+                    <span style="font-size:11.5px; color:var(--gold);">◇ {{ c.reward }}</span>
+                  </div>
+                  <div style="font-size:11px; color:var(--mute); margin-top:4px; line-height:1.4;">{{ c.desc }}</div>
+                </div>
+              </sc-for>
+            </div>
+            <div style="display:flex; gap:10px;">
+              <sc-for list="{{ questShops }}" as="s" hint-placeholder-count="2">
+                <div style="flex:1; padding:16px 14px; border-radius:14px; background:var(--card-bg); border:1px solid var(--line); cursor:pointer; text-align:center;" style-hover="border-color:var(--gold-d)">
+                  <div style="width:34px; height:34px; margin:0 auto 9px; border-radius:9px; transform:rotate(45deg); background:linear-gradient(135deg,var(--gold-b),var(--gold-d));"></div>
+                  <div style="font-size:12.5px; font-weight:600;">{{ s.name }}</div>
+                  <div style="font-size:10.5px; color:var(--mute); margin-top:3px;">{{ s.desc }}</div>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+        </div>
+      </div>
+      </sc-if>
+
+      <!-- ============ DECK EDITOR ============ -->
+      <sc-if value="{{ isDecks }}" hint-placeholder-val="{{ true }}">
+      <div style="display:flex; height:100%;">
+        <div style="width:228px; flex:none; border-right:1px solid var(--line); background:var(--bg2); padding:20px 18px; overflow-y:auto;">
+          <div style="font-family:'Cinzel',serif; font-size:11px; letter-spacing:0.12em; text-transform:uppercase; color:var(--dim); margin-bottom:12px;">Editor</div>
+          <div style="display:flex; gap:6px; margin-bottom:20px;">
+            <sc-for list="{{ editorTypes }}" as="e" hint-placeholder-count="3"><div onClick="{{ e.onClick }}" style="flex:1; text-align:center; padding:7px 0; border-radius:8px; font-size:11px; cursor:pointer; color:{{ e.color }}; background:{{ e.bg }}; border:1px solid {{ e.border }};">{{ e.name }}</div></sc-for>
+          </div>
+          <div style="font-family:'Cinzel',serif; font-size:11px; letter-spacing:0.12em; text-transform:uppercase; color:var(--dim); margin-bottom:12px;">Colors</div>
+          <div style="display:flex; gap:7px; margin-bottom:22px;">
+            <sc-for list="{{ colorFilters }}" as="c" hint-placeholder-count="5">
+              <div onClick="{{ c.onClick }}" style="flex:1; aspect-ratio:1; border-radius:9px; display:grid; place-items:center; cursor:pointer; background:{{ c.bg }}; border:1.5px solid {{ c.border }};">
+                <span style="width:15px; height:15px; border-radius:50%; background:{{ c.dot }};"></span>
+              </div>
+            </sc-for>
+          </div>
+          <div style="font-family:'Cinzel',serif; font-size:11px; letter-spacing:0.12em; text-transform:uppercase; color:var(--dim); margin-bottom:12px;">Type</div>
+          <div style="display:flex; flex-direction:column; gap:4px; margin-bottom:22px;">
+            <sc-for list="{{ typeFilters }}" as="t" hint-placeholder-count="5">
+              <div onClick="{{ t.onClick }}" style="display:flex; align-items:center; gap:10px; padding:7px 10px; border-radius:8px; cursor:pointer; font-size:12px; color:{{ t.color }}; background:{{ t.bg }};">
+                <span style="width:14px; height:14px; border-radius:4px; border:1.5px solid {{ t.box }}; background:{{ t.fill }};"></span>{{ t.name }}
+              </div>
+            </sc-for>
+          </div>
+          <div style="font-family:'Cinzel',serif; font-size:11px; letter-spacing:0.12em; text-transform:uppercase; color:var(--dim); margin-bottom:12px;">Mana Value</div>
+          <div style="display:flex; align-items:flex-end; gap:4px; height:50px;">
+            <sc-for list="{{ cmcMini }}" as="b" hint-placeholder-count="8"><div style="flex:1; height:{{ b.h }}; border-radius:3px 3px 0 0; background:var(--gold-d);"></div></sc-for>
+          </div>
+        </div>
+
+        <div style="flex:1; min-width:0; padding:20px 22px; overflow-y:auto;">
+          <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:16px;">
+            <div style="font-size:13px; color:var(--dim);">Showing <span style="color:var(--text); font-weight:600;">248</span> cards</div>
+            <div style="display:flex; gap:6px;">
+              <sc-for list="{{ sortTabs }}" as="s" hint-placeholder-count="3"><div style="padding:7px 13px; border-radius:8px; font-size:11.5px; cursor:pointer; color:{{ s.color }}; background:{{ s.bg }};">{{ s.name }}</div></sc-for>
+            </div>
+          </div>
+          <div style="display:grid; grid-template-columns:repeat(auto-fill,minmax(146px,1fr)); gap:14px;">
+            <sc-for list="{{ gridCards }}" as="c" hint-placeholder-count="12">
+              <div style="border-radius:12px; overflow:hidden; border:1px solid var(--line); background:var(--card-bg); cursor:pointer; transition:transform .16s, box-shadow .16s;" style-hover="transform:translateY(-4px); box-shadow:0 16px 30px -14px rgba(0,0,0,0.7)">
+                <div style="position:relative; aspect-ratio:1.32; background:var(--art), {{ c.grad }};">
+                  <div style="position:absolute; inset:0; background:radial-gradient(70% 80% at 50% 30%, {{ c.glow }}, transparent 65%);"></div>
+                  <div style="position:absolute; top:8px; right:8px; display:flex; gap:3px;">
+                    <sc-for list="{{ c.cost }}" as="p" hint-placeholder-count="2"><span style="width:15px; height:15px; border-radius:50%; background:{{ p }}; border:1px solid rgba(0,0,0,0.3);"></span></sc-for>
+                  </div>
+                  <div style="position:absolute; left:0; right:0; bottom:0; padding:7px 9px; font-family:'monospace'; font-size:8.5px; letter-spacing:0.08em; color:var(--mute); text-transform:uppercase;">{{ c.artNote }}</div>
+                </div>
+                <div style="padding:9px 10px 10px;">
+                  <div style="font-size:12.5px; font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{{ c.name }}</div>
+                  <div style="display:flex; justify-content:space-between; align-items:center; margin-top:5px;">
+                    <span style="font-size:10.5px; color:var(--mute);">{{ c.type }}</span>
+                    <span style="font-size:11px; font-weight:600; color:{{ c.accent }};">{{ c.pt }}</span>
+                  </div>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+
+        <div style="width:296px; flex:none; border-left:1px solid var(--line); background:var(--bg2); display:flex; flex-direction:column;">
+          <div style="padding:18px 20px 14px; border-bottom:1px solid var(--line);">
+            <input value="Azorius Control" style="width:100%; background:transparent; border:none; outline:none; font-family:'Cinzel',serif; font-size:17px; font-weight:600; color:var(--text);"/>
+            <div style="display:flex; align-items:center; gap:12px; margin-top:8px;">
+              <span style="font-size:12px; color:var(--dim);">60 cards</span>
+              <span style="width:4px; height:4px; border-radius:50%; background:var(--mute);"></span>
+              <div style="display:flex; gap:3px;"><span style="width:13px; height:13px; border-radius:50%; background:var(--w);"></span><span style="width:13px; height:13px; border-radius:50%; background:var(--u);"></span></div>
+            </div>
+          </div>
+          <div style="padding:16px 20px; border-bottom:1px solid var(--line);">
+            <div style="display:flex; justify-content:space-between; font-size:11px; color:var(--dim); margin-bottom:10px;"><span>Mana Curve</span><span>avg 2.8</span></div>
+            <div style="display:flex; align-items:flex-end; gap:5px; height:64px;">
+              <sc-for list="{{ curve }}" as="b" hint-placeholder-count="7">
+                <div style="flex:1; display:flex; flex-direction:column; align-items:center; gap:5px;">
+                  <div style="width:100%; height:{{ b.h }}; border-radius:4px 4px 0 0; background:linear-gradient(180deg,var(--gold),var(--gold-d));"></div>
+                  <span style="font-size:9px; color:var(--mute);">{{ b.label }}</span>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+          <div style="flex:1; overflow-y:auto; padding:12px 14px;">
+            <sc-for list="{{ deckList }}" as="d" hint-placeholder-count="7">
+              <sc-if value="{{ d.isHeader }}" hint-placeholder-val="{{ true }}">
+                <div style="font-size:10.5px; letter-spacing:0.14em; text-transform:uppercase; color:var(--gold); padding:12px 6px 6px;">{{ d.name }}</div>
+              </sc-if>
+              <sc-if value="{{ d.isCard }}" hint-placeholder-val="{{ true }}">
+                <div style="display:flex; align-items:center; gap:10px; padding:7px 8px; border-radius:8px; cursor:pointer; font-size:12.5px;" style-hover="background:var(--panel)">
+                  <span style="width:20px; text-align:center; color:var(--dim); font-size:11px;">{{ d.qty }}</span>
+                  <span style="flex:1; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{{ d.name }}</span>
+                  <span style="display:flex; gap:2px;"><sc-for list="{{ d.pips }}" as="p" hint-placeholder-count="1"><span style="width:11px; height:11px; border-radius:50%; background:{{ p }};"></span></sc-for></span>
+                </div>
+              </sc-if>
+            </sc-for>
+          </div>
+          <div style="padding:14px 18px; border-top:1px solid var(--line); display:flex; gap:8px;">
+            <button style="flex:1; height:42px; border:none; border-radius:11px; cursor:pointer; font-family:'Sora'; font-weight:600; font-size:13px; color:#1c1608; background:linear-gradient(150deg,var(--gold-b),var(--gold));" style-hover="filter:brightness(1.05)">Save Deck</button>
+            <button style="width:44px; height:42px; border-radius:11px; cursor:pointer; background:var(--panel2); border:1px solid var(--line); color:var(--dim); font-size:15px;" title="Import">⭳</button>
+            <button style="width:44px; height:42px; border-radius:11px; cursor:pointer; background:var(--panel2); border:1px solid var(--line); color:var(--dim); font-size:15px;" title="Export">⭱</button>
+          </div>
+        </div>
+      </div>
+      </sc-if>
+
+      <!-- ============ BATTLEFIELD ============ -->
+      <sc-if value="{{ isBattle }}" hint-placeholder-val="{{ true }}">
+      <div style="height:100%; display:flex; flex-direction:column; background:radial-gradient(120% 80% at 50% 50%, rgba(154,120,196,0.08), transparent 60%), var(--bg);">
+
+        <div style="flex:none; display:flex; align-items:center; gap:16px; padding:12px 24px; border-bottom:1px solid var(--line); background:linear-gradient(180deg,rgba(219,92,72,0.08),transparent);">
+          <div style="width:46px; height:46px; border-radius:12px; background:var(--art), linear-gradient(140deg,var(--r),var(--b)); border:1px solid var(--line);"></div>
+          <div>
+            <div style="font-size:14px; font-weight:600;">Sarkhan, Dragon Ascendant</div>
+            <div style="font-size:11px; color:var(--mute);">Rakdos Aggro · AI</div>
+          </div>
+          <div style="display:flex; gap:5px; margin-left:6px;">
+            <sc-for list="{{ oppMana }}" as="m" hint-placeholder-count="4"><span style="width:16px; height:16px; border-radius:50%; background:{{ m }}; opacity:0.9;"></span></sc-for>
+          </div>
+          <div style="flex:1;"></div>
+          <div style="font-size:11px; color:var(--mute);">Hand {{ oppHand }} · Library 34</div>
+          <div style="display:flex; align-items:center; gap:9px; padding:6px 16px 6px 8px; border-radius:100px; background:var(--panel); border:1px solid var(--line);">
+            <span style="width:34px; height:34px; border-radius:50%; display:grid; place-items:center; background:linear-gradient(150deg,var(--r),#8a2f22); color:#fff; font-weight:700; font-size:15px;">{{ oppLife }}</span>
+            <span style="font-size:11px; color:var(--dim); letter-spacing:0.1em; text-transform:uppercase;">Life</span>
+          </div>
+        </div>
+
+        <div style="flex:1; min-height:0; display:flex; flex-direction:column; padding:14px 24px; gap:10px;">
+          <div style="flex:1; display:flex; flex-direction:column; gap:8px; justify-content:center;">
+            <div style="display:flex; gap:9px; min-height:34px;">
+              <sc-for list="{{ oppLands }}" as="l" hint-placeholder-count="5"><div style="width:44px; height:30px; border-radius:5px; background:var(--art), {{ l.grad }}; border:1px solid var(--line2);"></div></sc-for>
+            </div>
+            <div style="display:flex; gap:11px;">
+              <sc-for list="{{ oppCreatures }}" as="c" hint-placeholder-count="3">
+                <div style="width:86px; border-radius:8px; overflow:hidden; border:1px solid var(--line); background:var(--card-bg);">
+                  <div style="height:52px; background:var(--art), {{ c.grad }}; position:relative;"><div style="position:absolute; inset:0; background:radial-gradient(70% 80% at 50% 40%, {{ c.glow }}, transparent 70%);"></div></div>
+                  <div style="padding:5px 7px; display:flex; justify-content:space-between; align-items:center;"><span style="font-size:9.5px; color:var(--dim); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{{ c.name }}</span><span style="font-size:10px; font-weight:700; color:var(--r);">{{ c.pt }}</span></div>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+
+          <div style="flex:none; display:flex; align-items:center; gap:16px; padding:9px 18px; border-radius:14px; background:var(--panel); border:1px solid var(--line);">
+            <div style="display:flex; gap:6px; flex:1;">
+              <sc-for list="{{ phases }}" as="p" hint-placeholder-count="7">
+                <div style="flex:1; text-align:center; padding:6px 4px; border-radius:7px; font-size:10px; letter-spacing:0.03em; color:{{ p.color }}; background:{{ p.bg }}; border:1px solid {{ p.border }};">{{ p.name }}</div>
+              </sc-for>
+            </div>
+            <div style="display:flex; align-items:center; gap:10px; padding-left:14px; border-left:1px solid var(--line);">
+              <span style="font-size:11px; color:var(--gold); letter-spacing:0.1em; text-transform:uppercase;">Your Turn</span>
+              <button style="height:36px; padding:0 20px; border:none; border-radius:10px; cursor:pointer; font-family:'Sora'; font-weight:600; font-size:12.5px; color:#1c1608; background:linear-gradient(150deg,var(--gold-b),var(--gold));" style-hover="filter:brightness(1.06)">Pass ▸</button>
+            </div>
+          </div>
+
+          <div style="flex:1; display:flex; flex-direction:column; gap:8px; justify-content:center;">
+            <div style="display:flex; gap:11px;">
+              <sc-for list="{{ myCreatures }}" as="c" hint-placeholder-count="3">
+                <div style="width:96px; border-radius:9px; overflow:hidden; border:1px solid var(--gold-d); background:var(--card-bg); box-shadow:0 0 18px -6px rgba(217,180,95,0.4);">
+                  <div style="height:60px; background:var(--art), {{ c.grad }}; position:relative;"><div style="position:absolute; inset:0; background:radial-gradient(70% 80% at 50% 40%, {{ c.glow }}, transparent 70%);"></div></div>
+                  <div style="padding:5px 8px; display:flex; justify-content:space-between; align-items:center;"><span style="font-size:10px; color:var(--text); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{{ c.name }}</span><span style="font-size:11px; font-weight:700; color:var(--g);">{{ c.pt }}</span></div>
+                </div>
+              </sc-for>
+            </div>
+            <div style="display:flex; gap:9px; min-height:34px;">
+              <sc-for list="{{ myLands }}" as="l" hint-placeholder-count="6"><div style="width:44px; height:30px; border-radius:5px; background:var(--art), {{ l.grad }}; border:1px solid var(--line2);"></div></sc-for>
+            </div>
+          </div>
+        </div>
+
+        <div style="flex:none; display:flex; align-items:flex-end; gap:18px; padding:0 24px 14px;">
+          <div style="display:flex; flex-direction:column; align-items:center; gap:6px; padding-bottom:6px;">
+            <span style="width:52px; height:52px; border-radius:50%; display:grid; place-items:center; background:linear-gradient(150deg,var(--g),#2f6b3a); color:#fff; font-weight:700; font-size:20px; animation:pulseRing 2.4s infinite;">{{ myLife }}</span>
+            <div style="display:flex; gap:4px;"><sc-for list="{{ myMana }}" as="m" hint-placeholder-count="5"><span style="width:14px; height:14px; border-radius:50%; background:{{ m }};"></span></sc-for></div>
+          </div>
+          <div style="flex:1; display:flex; justify-content:center; perspective:1000px;">
+            <sc-for list="{{ myHand }}" as="c" hint-placeholder-count="6">
+              <div style="width:118px; margin:0 -8px; border-radius:11px; overflow:hidden; border:1px solid var(--line); background:var(--card-bg); transform:translateY({{ c.lift }}) rotate({{ c.rot }}); transform-origin:bottom center; transition:transform .2s; cursor:pointer; box-shadow:0 12px 24px -12px rgba(0,0,0,0.8);" style-hover="transform:translateY(-26px) rotate(0deg); z-index:20">
+                <div style="height:76px; background:var(--art), {{ c.grad }}; position:relative;">
+                  <div style="position:absolute; inset:0; background:radial-gradient(70% 80% at 50% 35%, {{ c.glow }}, transparent 66%);"></div>
+                  <div style="position:absolute; top:7px; right:7px; display:flex; gap:3px;"><sc-for list="{{ c.cost }}" as="p" hint-placeholder-count="2"><span style="width:15px; height:15px; border-radius:50%; background:{{ p }}; border:1px solid rgba(0,0,0,0.3);"></span></sc-for></div>
+                </div>
+                <div style="padding:7px 9px 9px;">
+                  <div style="font-size:11px; font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{{ c.name }}</div>
+                  <div style="display:flex; justify-content:space-between; margin-top:4px;"><span style="font-size:9px; color:var(--mute);">{{ c.type }}</span><span style="font-size:10.5px; font-weight:700; color:{{ c.accent }};">{{ c.pt }}</span></div>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+          <div style="width:52px;"></div>
+        </div>
+      </div>
+      </sc-if>
+
+      <!-- ============ SETTINGS ============ -->
+      <sc-if value="{{ isSettings }}" hint-placeholder-val="{{ true }}">
+      <div style="display:flex; height:100%;">
+        <div style="width:220px; flex:none; border-right:1px solid var(--line); padding:22px 16px; background:var(--bg2);">
+          <sc-for list="{{ settingsNav }}" as="s" hint-placeholder-count="5">
+            <div onClick="{{ s.onClick }}" style="padding:11px 14px; border-radius:10px; font-size:13px; cursor:pointer; margin-bottom:3px; color:{{ s.color }}; background:{{ s.bg }}; font-weight:{{ s.weight }};">{{ s.name }}</div>
+          </sc-for>
+        </div>
+        <div style="flex:1; overflow-y:auto; padding:30px 40px;">
+          <div style="max-width:760px;">
+
+          <sc-if value="{{ catPrefs }}" hint-placeholder-val="{{ true }}">
+            <div style="font-family:'Cinzel',serif; font-size:20px; font-weight:600; letter-spacing:0.06em; margin-bottom:6px;">Preferences</div>
+            <div style="font-size:13px; color:var(--dim); margin-bottom:24px;">Skins, gameplay and interface options.</div>
+            <div style="border-radius:16px; background:var(--panel); border:1px solid var(--line); overflow:hidden;">
+              <div style="display:flex; align-items:center; justify-content:space-between; padding:18px 22px; border-bottom:1px solid var(--line2);">
+                <div><div style="font-size:14px; font-weight:600;">Skin / Theme</div><div style="font-size:12px; color:var(--mute); margin-top:3px;">Switch between the Umbral dark plane and Radiant parchment.</div></div>
+                <div style="display:flex; gap:6px; padding:4px; border-radius:11px; background:var(--panel2); border:1px solid var(--line);">
+                  <div onClick="{{ setDark }}" style="display:flex; align-items:center; gap:7px; padding:8px 15px; border-radius:8px; font-size:12.5px; cursor:pointer; color:{{ darkCol }}; background:{{ darkBtn }};">☾ Umbral</div>
+                  <div onClick="{{ setLight }}" style="display:flex; align-items:center; gap:7px; padding:8px 15px; border-radius:8px; font-size:12.5px; cursor:pointer; color:{{ lightCol }}; background:{{ lightBtn }};">☀ Radiant</div>
+                </div>
+              </div>
+              <sc-for list="{{ toggles }}" as="t" hint-placeholder-count="4">
+                <div style="display:flex; align-items:center; justify-content:space-between; padding:18px 22px; border-bottom:1px solid var(--line2);">
+                  <div><div style="font-size:14px; font-weight:600;">{{ t.name }}</div><div style="font-size:12px; color:var(--mute); margin-top:3px;">{{ t.desc }}</div></div>
+                  <div onClick="{{ t.onClick }}" style="width:46px; height:26px; border-radius:100px; padding:3px; cursor:pointer; background:{{ t.track }}; transition:background .2s;">
+                    <div style="width:20px; height:20px; border-radius:50%; background:#fff; transform:translateX({{ t.knob }}); transition:transform .2s; box-shadow:0 2px 5px rgba(0,0,0,0.3);"></div>
+                  </div>
+                </div>
+              </sc-for>
+              <div style="padding:20px 22px;">
+                <div style="display:flex; justify-content:space-between; margin-bottom:12px;"><span style="font-size:14px; font-weight:600;">Card Animation Speed</span><span style="font-size:12px; color:var(--gold);">{{ animSpeed }}</span></div>
+                <div style="height:6px; border-radius:6px; background:var(--panel2); position:relative;">
+                  <div style="position:absolute; left:0; top:0; bottom:0; width:{{ animPct }}; border-radius:6px; background:linear-gradient(90deg,var(--gold-d),var(--gold-b));"></div>
+                  <div style="position:absolute; top:50%; left:{{ animPct }}; transform:translate(-50%,-50%); width:18px; height:18px; border-radius:50%; background:var(--gold-b); border:2px solid var(--bg); cursor:pointer;"></div>
+                </div>
+              </div>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{ catAch }}" hint-placeholder-val="{{ true }}">
+            <div style="font-family:'Cinzel',serif; font-size:20px; font-weight:600; letter-spacing:0.06em; margin-bottom:6px;">Achievements</div>
+            <div style="font-size:13px; color:var(--dim); margin-bottom:24px;">Trophies earned across every mode of play.</div>
+            <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:14px;">
+              <sc-for list="{{ achievements }}" as="a" hint-placeholder-count="6">
+                <div style="border-radius:14px; background:var(--panel); border:1px solid var(--line); padding:18px 16px; text-align:center; opacity:{{ a.opacity }};">
+                  <div style="width:48px; height:48px; margin:0 auto 12px; transform:rotate(45deg); border-radius:12px; background:{{ a.grad }}; border:1px solid var(--line);"></div>
+                  <div style="font-size:13px; font-weight:600;">{{ a.name }}</div>
+                  <div style="font-size:11px; color:var(--mute); margin-top:5px; line-height:1.4;">{{ a.desc }}</div>
+                </div>
+              </sc-for>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{ catAva }}" hint-placeholder-val="{{ true }}">
+            <div style="font-family:'Cinzel',serif; font-size:20px; font-weight:600; letter-spacing:0.06em; margin-bottom:6px;">Avatars</div>
+            <div style="font-size:13px; color:var(--dim); margin-bottom:24px;">Choose the portrait shown at your side of the battlefield.</div>
+            <div style="display:grid; grid-template-columns:repeat(6,1fr); gap:12px;">
+              <sc-for list="{{ avatars }}" as="a" hint-placeholder-count="12">
+                <div onClick="{{ a.onClick }}" style="aspect-ratio:1; border-radius:14px; cursor:pointer; background:var(--art), {{ a.grad }}; border:2px solid {{ a.border }};"></div>
+              </sc-for>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{ catDl }}" hint-placeholder-val="{{ true }}">
+            <div style="font-family:'Cinzel',serif; font-size:20px; font-weight:600; letter-spacing:0.06em; margin-bottom:6px;">Content Downloaders</div>
+            <div style="font-size:13px; color:var(--dim); margin-bottom:24px;">Fetch card images, sets, and quest assets from the Forge servers.</div>
+            <div style="border-radius:16px; background:var(--panel); border:1px solid var(--line); overflow:hidden;">
+              <sc-for list="{{ downloads }}" as="d" hint-placeholder-count="4">
+                <div style="display:flex; align-items:center; gap:16px; padding:16px 20px; border-bottom:1px solid var(--line2);">
+                  <div style="flex:1;">
+                    <div style="font-size:13.5px; font-weight:600;">{{ d.name }}</div>
+                    <div style="font-size:11.5px; color:var(--mute); margin-top:3px;">{{ d.size }}</div>
+                  </div>
+                  <div style="width:120px; height:6px; border-radius:6px; background:var(--panel2); overflow:hidden;"><div style="height:100%; width:{{ d.pct }}; background:linear-gradient(90deg,var(--gold-d),var(--gold-b));"></div></div>
+                  <button style="width:100px; height:34px; border-radius:9px; cursor:pointer; font-family:'Sora'; font-size:12px; font-weight:600; color:{{ d.btnCol }}; background:{{ d.btnBg }}; border:1px solid var(--line);">{{ d.btn }}</button>
+                </div>
+              </sc-for>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{ catNotes }}" hint-placeholder-val="{{ true }}">
+            <div style="font-family:'Cinzel',serif; font-size:20px; font-weight:600; letter-spacing:0.06em; margin-bottom:6px;">Release Notes</div>
+            <div style="font-size:13px; color:var(--dim); margin-bottom:24px;">What's new in recent snapshot and stable builds.</div>
+            <div style="display:flex; flex-direction:column; gap:14px;">
+              <sc-for list="{{ releaseNotes }}" as="r" hint-placeholder-count="3">
+                <div style="border-radius:14px; background:var(--panel); border:1px solid var(--line); padding:18px 20px;">
+                  <div style="display:flex; align-items:baseline; gap:12px;">
+                    <span style="font-family:'Cinzel',serif; font-size:15px; font-weight:600; color:var(--gold-b);">{{ r.version }}</span>
+                    <span style="font-size:11px; color:var(--mute);">{{ r.date }}</span>
+                  </div>
+                  <ul style="margin:12px 0 0; padding-left:0; list-style:none; display:flex; flex-direction:column; gap:7px;">
+                    <sc-for list="{{ r.items }}" as="li" hint-placeholder-count="3">
+                      <li style="display:flex; gap:10px; font-size:12.5px; color:var(--dim);"><span style="width:5px; height:5px; margin-top:6px; flex:none; transform:rotate(45deg); background:var(--gold-d);"></span>{{ li }}</li>
+                    </sc-for>
+                  </ul>
+                </div>
+              </sc-for>
+            </div>
+          </sc-if>
+
+          </div>
+        </div>
+      </div>
+      </sc-if>
+
+    </section>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1440,&quot;height&quot;:900}}">
+class Component extends DCLogic {
+  state = {
+    screen: 'home', active: 'home', theme: 'dark', collapsed: {},
+    mode: 'Constructed', format: 'Constructed', settingsCat: 'Preferences',
+    life: 20, best: 'Bo3', opp: 'Sarkhan', deck: 'Azorius Control', oppDeck: 'Random',
+    players: [
+      { id: 1, name: 'You', type: 'Human', deck: 'Azorius Control' },
+      { id: 2, name: 'Sarkhan (AI)', type: 'AI', deck: 'Random' },
+    ], nextPid: 3, openDeck: null,
+    variants: { Commander: false, Planechase: false, Archenemy: false, Vanguard: false, 'Momir Basic': false, 'Tiny Leaders': false },
+    colors: { W: true, U: true, B: false, R: false, G: false },
+    types: { Creature: true, Instant: true, Sorcery: true, Enchant: false, Land: true },
+    editor: 'Constructed',
+    toggles: { fullArt: true, autoYield: false, stackAnim: true, tips: true },
+  };
+
+  componentDidMount() { this.applyTheme(this.state.theme); }
+  applyTheme(t) { document.documentElement.setAttribute('data-theme', t === 'light' ? 'light' : ''); }
+  setTheme(t) { this.applyTheme(t); this.setState({ theme: t }); }
+  go(screen, active, extra) { this.setState({ screen, active: active || screen, ...(extra || {}) }); const sec = document.querySelector('section'); if (sec) sec.scrollTop = 0; }
+  addPlayer() { this.setState(st => st.players.length >= 8 ? null : ({ players: [...st.players, { id: st.nextPid, name: 'Opponent ' + st.players.length, type: 'AI', deck: 'Random' }], nextPid: st.nextPid + 1 })); }
+  removePlayer(id) { this.setState(st => ({ players: st.players.filter(p => p.id !== id), openDeck: st.openDeck === id ? null : st.openDeck })); }
+  setPlayerType(id, type) { this.setState(st => ({ players: st.players.map(p => p.id === id ? { ...p, type } : p) })); }
+  setPlayerName(id, val) { this.setState(st => ({ players: st.players.map(p => p.id === id ? { ...p, name: val } : p) })); }
+  setPlayerDeck(id, deck) { this.setState(st => ({ players: st.players.map(p => p.id === id ? { ...p, deck } : p), openDeck: null })); }
+  toggleDeckMenu(id) { this.setState(st => ({ openDeck: st.openDeck === id ? null : id })); }
+
+  renderVals() {
+    const s = this.state, self = this;
+    const C = { W: 'var(--w)', U: 'var(--u)', B: 'var(--b)', R: 'var(--r)', G: 'var(--g)' };
+
+    // ---------- sidebar: real Forge menu structure ----------
+    const item = (id, label, screen, extra) => ({
+      id, label, active: s.active === id, onClick: () => self.go(screen, id, extra),
+      bg: s.active === id ? 'var(--panel)' : 'transparent',
+      color: s.active === id ? 'var(--gold-b)' : 'var(--dim)',
+      mark: s.active === id ? 'var(--gold-b)' : 'var(--mute)',
+      weight: s.active === id ? 600 : 400,
+    });
+    const navGroups = [
+      { hasTitle: false, title: '', items: [ item('home', 'Home', 'home'), item('decks', 'Deck Editor', 'decks') ] },
+      { hasTitle: true, title: 'Sanctioned', items: [
+        item('constructed', 'Constructed', 'play', { mode: 'Constructed', format: 'Constructed' }),
+        item('draft', 'Booster Draft', 'play', { mode: 'Booster Draft', format: 'Draft' }),
+        item('sealed', 'Sealed Deck', 'play', { mode: 'Sealed', format: 'Sealed' }),
+      ] },
+      { hasTitle: true, title: 'Quest Mode', items: [
+        item('qnew', 'New Quest', 'quest'), item('qduels', 'Duels', 'quest'),
+        item('qchal', 'Challenges', 'quest'), item('qdraft', 'Quest Draft', 'quest'),
+        item('qdecks', 'Quest Decks', 'quest'),
+      ] },
+      { hasTitle: true, title: 'More Modes', items: [
+        item('gauntlet', 'Gauntlet', 'play', { mode: 'Gauntlet', format: 'Constructed' }),
+        item('puzzle', 'Puzzle', 'quest'),
+        item('conquest', 'Planar Conquest', 'play', { mode: 'Planar Conquest', format: 'Commander' }),
+        item('online', 'Online Multiplayer', 'play', { mode: 'Online Multiplayer', format: 'Constructed' }),
+      ] },
+      { hasTitle: true, title: 'Settings', items: [
+        item('prefs', 'Preferences', 'settings', { settingsCat: 'Preferences' }),
+        item('ach', 'Achievements', 'settings', { settingsCat: 'Achievements' }),
+        item('ava', 'Avatars', 'settings', { settingsCat: 'Avatars' }),
+        item('dl', 'Content Downloaders', 'settings', { settingsCat: 'Downloads' }),
+        item('notes', 'Release Notes', 'settings', { settingsCat: 'Release Notes' }),
+      ] },
+    ];
+
+    navGroups.forEach(g => {
+      if (g.hasTitle) {
+        const t = g.title;
+        g.open = !s.collapsed[t];
+        g.chev = g.open ? '90deg' : '0deg';
+        g.onToggle = () => self.setState({ collapsed: { ...s.collapsed, [t]: !s.collapsed[t] } });
+      } else { g.open = true; g.chev = '0deg'; g.onToggle = () => {}; }
+    });
+
+    const titleMap = { home: 'Command Center', decks: 'Deck Editor', battle: 'Live Match', quest: 'Quest Journal' };
+    let headerTitle = titleMap[s.screen] || '';
+    if (s.screen === 'play') headerTitle = s.mode;
+    if (s.screen === 'settings') headerTitle = s.settingsCat === 'Downloads' ? 'Content Downloaders' : s.settingsCat;
+
+    // ---------- home ----------
+    const modes = [
+      { name: 'Constructed', tag: 'Sanctioned', desc: 'Bring a 60-card deck vs AI.', accent: 'var(--u)', glow: 'rgba(90,151,221,0.45)', go: () => self.go('play', 'constructed', { mode: 'Constructed', format: 'Constructed' }) },
+      { name: 'Booster Draft', tag: 'Limited', desc: 'Open packs, pick, and build.', accent: 'var(--g)', glow: 'rgba(95,176,111,0.45)', go: () => self.go('play', 'draft', { mode: 'Booster Draft', format: 'Draft' }) },
+      { name: 'Sealed Deck', tag: 'Limited', desc: 'Six packs, one pool.', accent: 'var(--r)', glow: 'rgba(219,92,72,0.45)', go: () => self.go('play', 'sealed', { mode: 'Sealed', format: 'Sealed' }) },
+      { name: 'Commander', tag: 'Variant', desc: '100-card singleton duels.', accent: 'var(--b)', glow: 'rgba(154,120,196,0.45)', go: () => self.go('play', 'constructed', { mode: 'Commander', format: 'Commander' }) },
+      { name: 'Quest', tag: 'Campaign', desc: 'Earn credits, grow a collection.', accent: 'var(--g)', glow: 'rgba(95,176,111,0.4)', go: () => self.go('quest', 'qduels') },
+      { name: 'Gauntlet', tag: 'Series', desc: 'Run a ladder of opponents.', accent: 'var(--r)', glow: 'rgba(219,92,72,0.4)', go: () => self.go('play', 'gauntlet', { mode: 'Gauntlet', format: 'Constructed' }) },
+      { name: 'Puzzle', tag: 'Solve', desc: 'Win from a fixed board state.', accent: 'var(--u)', glow: 'rgba(90,151,221,0.4)', go: () => self.go('quest', 'puzzle') },
+      { name: 'Planar Conquest', tag: 'Campaign', desc: 'Conquer planes, unlock commanders.', accent: 'var(--b)', glow: 'rgba(154,120,196,0.4)', go: () => self.go('play', 'conquest', { mode: 'Planar Conquest', format: 'Commander' }) },
+    ].map(m => ({ ...m, onClick: m.go }));
+
+    const recentDecks = [
+      { name: 'Azorius Control', meta: 'Constructed · edited 2h ago', grad: 'linear-gradient(140deg,var(--w),var(--u))', pips: [C.W, C.U], count: '60 cards' },
+      { name: 'Gruul Aggro', meta: 'Constructed · edited yesterday', grad: 'linear-gradient(140deg,var(--r),var(--g))', pips: [C.R, C.G], count: '60 cards' },
+      { name: 'Prossh, Skyraider', meta: 'Commander · edited 3d ago', grad: 'linear-gradient(140deg,var(--r),var(--g))', pips: [C.B, C.R, C.G], count: '100 cards' },
+    ].map(d => ({ ...d, onClick: () => self.go('decks') }));
+
+    const news = [
+      { tag: 'Snapshot', title: 'Bloomburrow set fully implemented — 261 cards added.' },
+      { tag: 'Adventure', title: 'The Verdant Reach region opens in Shandalar.' },
+      { tag: 'Engine', title: 'AI drafting logic improved for multicolor archetypes.' },
+    ].map(n => ({ ...n, onClick: () => self.go('settings', 'notes', { settingsCat: 'Release Notes' }) }));
+
+    // ---------- play / lobby ----------
+    const formats = ['Constructed', 'Commander', 'Draft', 'Sealed'].map(n => ({
+      name: n, active: s.format === n, onClick: () => self.setState({ format: n, mode: n === 'Draft' ? 'Booster Draft' : n }),
+      color: s.format === n ? 'var(--gold-b)' : 'var(--dim)', weight: s.format === n ? 600 : 400,
+    }));
+    const deckOptions = [
+      { name: 'Azorius Control', meta: 'WU · 60 cards', grad: 'linear-gradient(140deg,var(--w),var(--u))', pips: [C.W, C.U] },
+      { name: 'Gruul Aggro', meta: 'RG · 60 cards', grad: 'linear-gradient(140deg,var(--r),var(--g))', pips: [C.R, C.G] },
+      { name: 'Dimir Mill', meta: 'UB · 60 cards', grad: 'linear-gradient(140deg,var(--u),var(--b))', pips: [C.U, C.B] },
+      { name: 'Mono-Green Stompy', meta: 'G · 60 cards', grad: 'linear-gradient(140deg,var(--g),#2f6b3a)', pips: [C.G] },
+    ].map(d => ({ ...d, onClick: () => self.setState({ deck: d.name }),
+      bg: s.deck === d.name ? 'var(--panel2)' : 'transparent',
+      border: s.deck === d.name ? 'var(--gold-d)' : 'var(--line2)' }));
+    const opponents = [
+      { name: 'Sarkhan', tag: 'Rakdos Aggro', accent: 'var(--r)', grad: 'linear-gradient(140deg,var(--r),var(--b))' },
+      { name: 'Teferi', tag: 'Azorius Control', accent: 'var(--u)', grad: 'linear-gradient(140deg,var(--w),var(--u))' },
+      { name: 'Nissa', tag: 'Selesnya Midrange', accent: 'var(--g)', grad: 'linear-gradient(140deg,var(--g),var(--w))' },
+    ].map(o => ({ ...o, onClick: () => self.setState({ opp: o.name }),
+      bg: s.opp === o.name ? 'var(--panel2)' : 'transparent',
+      border: s.opp === o.name ? 'var(--gold-d)' : 'var(--line2)' }));
+    const oppDecks = ['Chosen', 'Random', 'Generated', 'Precon'].map(n => ({
+      name: n, onClick: () => self.setState({ oppDeck: n }),
+      color: s.oppDeck === n ? '#1c1608' : 'var(--dim)',
+      bg: s.oppDeck === n ? 'var(--gold)' : 'var(--panel2)',
+      border: s.oppDeck === n ? 'var(--gold)' : 'var(--line2)',
+    }));
+    const variants = Object.keys(s.variants).map(k => ({
+      name: k, onClick: () => self.setState({ variants: { ...s.variants, [k]: !s.variants[k] } }),
+      color: s.variants[k] ? '#1c1608' : 'var(--dim)',
+      bg: s.variants[k] ? 'var(--gold)' : 'transparent',
+      border: s.variants[k] ? 'var(--gold)' : 'var(--line2)',
+    }));
+    const on = Object.keys(s.variants).filter(k => s.variants[k]);
+    const variantSummary = on.length ? on.join(', ') : 'None';
+    const bestOf = ['Bo1', 'Bo3', 'Bo5'].map(n => ({
+      name: n, onClick: () => self.setState({ best: n }),
+      color: s.best === n ? '#1c1608' : 'var(--dim)',
+      bg: s.best === n ? 'var(--gold)' : 'var(--panel2)',
+      border: s.best === n ? 'var(--gold)' : 'var(--line2)',
+    }));
+    const deckPips = { 'Azorius Control': [C.W, C.U], 'Gruul Aggro': [C.R, C.G], 'Dimir Mill': [C.U, C.B], 'Mono-Green Stompy': [C.G], 'Prossh, Skyraider': [C.B, C.R, C.G], 'Random': [], 'Generated': [] };
+    const deckNames = ['Azorius Control', 'Gruul Aggro', 'Dimir Mill', 'Mono-Green Stompy', 'Random', 'Generated'];
+    const pAva = ['linear-gradient(140deg,var(--w),var(--u))', 'linear-gradient(140deg,var(--r),var(--b))', 'linear-gradient(140deg,var(--g),var(--u))', 'linear-gradient(140deg,var(--b),var(--r))', 'linear-gradient(140deg,var(--g),var(--w))', 'linear-gradient(140deg,var(--u),var(--b))', 'linear-gradient(140deg,var(--r),var(--g))', 'linear-gradient(140deg,var(--w),var(--r))'];
+    const players = s.players.map((p, i) => {
+      const isH = p.type === 'Human';
+      return {
+        name: p.name, deck: p.deck, pips: deckPips[p.deck] || [], grad: pAva[i % pAva.length],
+        badge: String(i + 1), badgeBg: 'var(--gold)',
+        border: s.openDeck === p.id ? 'var(--gold-d)' : 'var(--line2)',
+        chev: s.openDeck === p.id ? '90deg' : '0deg', menuOpen: s.openDeck === p.id,
+        removable: i > 0 && s.players.length > 2,
+        humanCol: isH ? '#1c1608' : 'var(--dim)', humanBg: isH ? 'var(--gold)' : 'transparent',
+        aiCol: !isH ? '#1c1608' : 'var(--dim)', aiBg: !isH ? 'var(--gold)' : 'transparent',
+        setHuman: () => self.setPlayerType(p.id, 'Human'), setAI: () => self.setPlayerType(p.id, 'AI'),
+        onRemove: () => self.removePlayer(p.id), onDeck: () => self.toggleDeckMenu(p.id),
+        onName: (e) => self.setPlayerName(p.id, e.target.value),
+        deckMenu: deckNames.map(dn => ({ name: dn, pips: deckPips[dn] || [], onClick: () => self.setPlayerDeck(p.id, dn), color: p.deck === dn ? 'var(--gold-b)' : 'var(--text)', bg: p.deck === dn ? 'var(--panel)' : 'transparent' })),
+      };
+    });
+    const playerCount = s.players.length;
+    const addCol = s.players.length < 8 ? 'var(--dim)' : 'var(--mute)';
+
+    // ---------- quest ----------
+    const questStats = [
+      { value: '58', label: 'Wins', color: 'var(--g)' },
+      { value: '19', label: 'Losses', color: 'var(--r)' },
+      { value: '4,820', label: 'Credits', color: 'var(--gold-b)' },
+      { value: '20', label: 'Life', color: 'var(--text)' },
+    ];
+    const duels = [
+      { name: 'Goblin Warren', deck: 'Mono-Red Goblins', diff: 'Easy', diffColor: 'var(--g)', reward: '120', grad: 'linear-gradient(140deg,var(--r),#8a2f22)' },
+      { name: 'Tidebinder Adept', deck: 'Mono-Blue Tempo', diff: 'Medium', diffColor: 'var(--gold)', reward: '210', grad: 'linear-gradient(140deg,var(--u),var(--b))' },
+      { name: 'Grove Warden', deck: 'Golgari Midrange', diff: 'Hard', diffColor: 'var(--r)', reward: '340', grad: 'linear-gradient(140deg,var(--g),var(--b))' },
+      { name: 'The Ninefold Court', deck: 'Esper Control', diff: 'Expert', diffColor: 'var(--r)', reward: '560', grad: 'linear-gradient(140deg,var(--w),var(--b))' },
+    ];
+    const challenges = [
+      { name: 'Trapped in the Tower', desc: 'Win with an empty library.', reward: '400' },
+      { name: 'The Broodmother', desc: 'Defeat a swarm of 1/1 tokens.', reward: '350' },
+      { name: 'Mind of the Sphinx', desc: 'Win the turn you cast your commander.', reward: '500' },
+    ];
+    const questShops = [
+      { name: 'Spell Shop', desc: 'Buy cards & boosters' },
+      { name: 'Bazaar', desc: 'Tokens, pets & upgrades' },
+    ];
+
+    // ---------- deck editor ----------
+    const editorTypes = ['Constructed', 'Commander', 'Limited'].map(n => ({
+      name: n, onClick: () => self.setState({ editor: n }),
+      color: s.editor === n ? '#1c1608' : 'var(--dim)',
+      bg: s.editor === n ? 'var(--gold)' : 'var(--panel2)',
+      border: s.editor === n ? 'var(--gold)' : 'var(--line2)',
+    }));
+    const colorDefs = [['W', C.W], ['U', C.U], ['B', C.B], ['R', C.R], ['G', C.G]];
+    const colorFilters = colorDefs.map(([k, v]) => ({
+      dot: v, onClick: () => self.setState({ colors: { ...s.colors, [k]: !s.colors[k] } }),
+      bg: s.colors[k] ? 'var(--panel2)' : 'transparent',
+      border: s.colors[k] ? v : 'var(--line2)',
+    }));
+    const typeFilters = Object.keys(s.types).map(k => ({
+      name: k, onClick: () => self.setState({ types: { ...s.types, [k]: !s.types[k] } }),
+      color: s.types[k] ? 'var(--text)' : 'var(--mute)',
+      bg: s.types[k] ? 'var(--panel)' : 'transparent',
+      box: s.types[k] ? 'var(--gold)' : 'var(--mute)',
+      fill: s.types[k] ? 'var(--gold)' : 'transparent',
+    }));
+    const cmcMini = [40, 70, 100, 85, 55, 45, 30, 20].map(h => ({ h: h + '%' }));
+    const sortTabs = ['Name', 'Mana', 'Rarity'].map((n, i) => ({ name: n, color: i === 0 ? 'var(--gold-b)' : 'var(--dim)', bg: i === 0 ? 'var(--panel2)' : 'transparent' }));
+    const cardData = [
+      ['Supreme Verdict', 'Sorcery', '—', [C.W, C.W], 'var(--w)', 'rgba(239,228,194,0.4)', 'Board wipe'],
+      ['Teferi, Time Raveler', 'Planeswalker', '3', [C.W, C.U], 'var(--u)', 'rgba(90,151,221,0.4)', 'Walker frame'],
+      ['Wandering Emperor', 'Planeswalker', '4', [C.W, C.W], 'var(--w)', 'rgba(239,228,194,0.4)', 'Flash walker'],
+      ['Counterspell', 'Instant', '—', [C.U, C.U], 'var(--u)', 'rgba(90,151,221,0.4)', 'Reactive'],
+      ['Memory Deluge', 'Instant', '—', [C.U, C.U], 'var(--u)', 'rgba(90,151,221,0.4)', 'Card draw'],
+      ['Skyclave Apparition', 'Creature', '2/2', [C.W, C.W], 'var(--w)', 'rgba(239,228,194,0.4)', 'Flyer'],
+      ['Solitude', 'Creature', '3/2', [C.W, C.W], 'var(--w)', 'rgba(239,228,194,0.4)', 'Elemental'],
+      ['Brazen Borrower', 'Creature', '3/1', [C.U, C.U], 'var(--u)', 'rgba(90,151,221,0.4)', 'Flash flyer'],
+      ['Dovin\u2019s Veto', 'Instant', '—', [C.W, C.U], 'var(--u)', 'rgba(90,151,221,0.4)', 'Hard counter'],
+      ['The Wandering', 'Enchant', '—', [C.W, C.W], 'var(--w)', 'rgba(239,228,194,0.4)', 'Saga'],
+      ['Hallowed Fountain', 'Land', '—', [C.W], 'var(--dim)', 'rgba(239,228,194,0.25)', 'Dual land'],
+      ['Portable Hole', 'Artifact', '—', [C.W], 'var(--w)', 'rgba(239,228,194,0.4)', 'Removal'],
+    ];
+    const gridCards = cardData.map(([name, type, pt, cpips, accent, glow, artNote]) => ({
+      name, type, pt, accent, glow, artNote, cost: cpips,
+      grad: 'linear-gradient(150deg,' + (accent === 'var(--u)' ? 'rgba(90,151,221,0.28)' : 'rgba(239,228,194,0.2)') + ',rgba(20,18,11,0.4))',
+    }));
+    const curve = [30, 100, 88, 62, 40, 24, 46].map((h, i) => ({ h: h + '%', label: i === 6 ? '6+' : String(i) }));
+    const deckList = [
+      { isHeader: true, name: 'Creatures · 12' },
+      { isCard: true, qty: '4', name: 'Solitude', pips: [C.W] },
+      { isCard: true, qty: '4', name: 'Skyclave Apparition', pips: [C.W] },
+      { isCard: true, qty: '4', name: 'Brazen Borrower', pips: [C.U] },
+      { isHeader: true, name: 'Spells · 24' },
+      { isCard: true, qty: '4', name: 'Counterspell', pips: [C.U] },
+      { isCard: true, qty: '3', name: 'Supreme Verdict', pips: [C.W] },
+      { isCard: true, qty: '3', name: 'Memory Deluge', pips: [C.U] },
+      { isCard: true, qty: '2', name: 'Teferi, Time Raveler', pips: [C.U] },
+      { isHeader: true, name: 'Lands · 24' },
+      { isCard: true, qty: '4', name: 'Hallowed Fountain', pips: [C.W] },
+      { isCard: true, qty: '9', name: 'Island', pips: [C.U] },
+      { isCard: true, qty: '7', name: 'Plains', pips: [C.W] },
+    ];
+
+    // ---------- battlefield ----------
+    const landGrad = (c) => 'linear-gradient(140deg,' + c + ',rgba(20,18,11,0.6))';
+    const oppLands = [C.R, C.R, C.B, C.B, C.R].map(c => ({ grad: landGrad(c) }));
+    const myLands = [C.W, C.W, C.U, C.U, C.W, C.U].map(c => ({ grad: landGrad(c) }));
+    const oppCreatures = [
+      { name: 'Bloodthirsty Adversary', pt: '2/2', grad: 'linear-gradient(150deg,var(--r),rgba(20,18,11,0.5))', glow: 'rgba(219,92,72,0.4)' },
+      { name: 'Fable of the Mirror', pt: '2/3', grad: 'linear-gradient(150deg,var(--r),rgba(20,18,11,0.5))', glow: 'rgba(219,92,72,0.4)' },
+      { name: 'Kroxa, Titan', pt: '6/6', grad: 'linear-gradient(150deg,var(--b),rgba(20,18,11,0.5))', glow: 'rgba(154,120,196,0.4)' },
+    ];
+    const myCreatures = [
+      { name: 'Solitude', pt: '3/2', grad: 'linear-gradient(150deg,var(--w),rgba(20,18,11,0.4))', glow: 'rgba(239,228,194,0.4)' },
+      { name: 'Skyclave Apparition', pt: '2/2', grad: 'linear-gradient(150deg,var(--w),rgba(20,18,11,0.4))', glow: 'rgba(239,228,194,0.4)' },
+      { name: 'Brazen Borrower', pt: '3/1', grad: 'linear-gradient(150deg,var(--u),rgba(20,18,11,0.4))', glow: 'rgba(90,151,221,0.4)' },
+    ];
+    const activePhase = 'Main 1';
+    const phases = ['Untap', 'Upkeep', 'Draw', 'Main 1', 'Combat', 'Main 2', 'End'].map(n => ({
+      name: n, color: n === activePhase ? '#1c1608' : 'var(--dim)',
+      bg: n === activePhase ? 'var(--gold)' : 'transparent',
+      border: n === activePhase ? 'var(--gold)' : 'var(--line2)',
+    }));
+    const handData = [
+      ['Counterspell', 'Instant', '—', 'var(--u)', C.U, C.U],
+      ['Supreme Verdict', 'Sorcery', '—', 'var(--w)', C.W, C.W],
+      ['Teferi, Time Raveler', 'Walker', '—', 'var(--u)', C.W, C.U],
+      ['Memory Deluge', 'Instant', '—', 'var(--u)', C.U, C.U],
+      ['Solitude', 'Creature', '3/2', 'var(--w)', C.W, C.W],
+      ['Hallowed Fountain', 'Land', '—', 'var(--dim)', C.W],
+    ];
+    const lifts = ['14px', '4px', '0px', '0px', '4px', '14px'];
+    const rots = ['-9deg', '-5deg', '-2deg', '2deg', '5deg', '9deg'];
+    const myHand = handData.map((d, i) => ({
+      name: d[0], type: d[1], pt: d[2], accent: d[3], cost: d.slice(4),
+      lift: lifts[i], rot: rots[i],
+      grad: 'linear-gradient(150deg,' + (d[3] === 'var(--u)' ? 'rgba(90,151,221,0.3)' : 'rgba(239,228,194,0.22)') + ',rgba(20,18,11,0.5))',
+      glow: d[3] === 'var(--u)' ? 'rgba(90,151,221,0.4)' : 'rgba(239,228,194,0.4)',
+    }));
+
+    // ---------- settings ----------
+    const settingsNav = [
+      ['Preferences', 'Preferences'], ['Achievements', 'Achievements'], ['Avatars', 'Avatars'],
+      ['Content Downloaders', 'Downloads'], ['Release Notes', 'Release Notes'],
+    ].map(([label, cat]) => ({
+      name: label, onClick: () => self.go('settings', cat === 'Downloads' ? 'dl' : null, { settingsCat: cat }),
+      color: s.settingsCat === cat ? 'var(--gold-b)' : 'var(--dim)',
+      bg: s.settingsCat === cat ? 'var(--panel)' : 'transparent',
+      weight: s.settingsCat === cat ? 600 : 400,
+    }));
+    const togDefs = [
+      ['fullArt', 'Full-art card frames', 'Show borderless art on the battlefield.'],
+      ['autoYield', 'Auto-yield priority', 'Skip empty phases when no plays are available.'],
+      ['stackAnim', 'Stack animations', 'Animate spells resolving on the stack.'],
+      ['tips', 'Rules tooltips', 'Explain keywords and interactions on hover.'],
+    ];
+    const toggles = togDefs.map(([k, name, desc]) => ({
+      name, desc, onClick: () => self.setState({ toggles: { ...s.toggles, [k]: !s.toggles[k] } }),
+      track: s.toggles[k] ? 'var(--gold)' : 'var(--panel2)', knob: s.toggles[k] ? '20px' : '0px',
+    }));
+    const achievements = [
+      { name: 'First Blood', desc: 'Win your first duel.', earned: true },
+      { name: 'Combo Master', desc: 'Win with an infinite combo.', earned: true },
+      { name: 'Untouchable', desc: 'Win without losing life.', earned: true },
+      { name: 'Deckbuilder', desc: 'Save 25 custom decks.', earned: false },
+      { name: 'Planeswalker', desc: 'Ultimate 10 planeswalkers.', earned: false },
+      { name: 'Completionist', desc: 'Own one of every card.', earned: false },
+    ].map(a => ({ ...a, opacity: a.earned ? '1' : '0.42',
+      grad: a.earned ? 'linear-gradient(135deg,var(--gold-b),var(--gold-d))' : 'linear-gradient(135deg,var(--panel2),var(--panel))' }));
+    const avaGrads = [
+      'linear-gradient(140deg,var(--r),var(--b))', 'linear-gradient(140deg,var(--u),var(--g))',
+      'linear-gradient(140deg,var(--w),var(--u))', 'linear-gradient(140deg,var(--g),var(--w))',
+      'linear-gradient(140deg,var(--b),var(--r))', 'linear-gradient(140deg,var(--u),var(--b))',
+      'linear-gradient(140deg,var(--r),var(--g))', 'linear-gradient(140deg,var(--g),var(--u))',
+      'linear-gradient(140deg,var(--b),var(--g))', 'linear-gradient(140deg,var(--w),var(--r))',
+      'linear-gradient(140deg,var(--u),var(--w))', 'linear-gradient(140deg,var(--r),var(--w))',
+    ];
+    const avatars = avaGrads.map((g, i) => ({ grad: g, border: i === 0 ? 'var(--gold-b)' : 'var(--line2)', onClick: () => {} }));
+    const downloads = [
+      { name: 'Card Images (LQ)', size: '1.2 GB · 31,204 cards', pct: '100%', btn: 'Update', done: true },
+      { name: 'Card Images (HQ)', size: '8.4 GB · full resolution', pct: '46%', btn: 'Pause', done: false },
+      { name: 'Set Symbols & Icons', size: '84 MB', pct: '100%', btn: 'Update', done: true },
+      { name: 'Quest & Adventure Art', size: '320 MB', pct: '0%', btn: 'Download', done: false },
+    ].map(d => ({ ...d, btnCol: d.done ? 'var(--dim)' : '#1c1608', btnBg: d.done ? 'var(--panel2)' : 'var(--gold)' }));
+    const releaseNotes = [
+      { version: 'Snapshot 2.0.14', date: 'June 2026', items: ['Bloomburrow set fully implemented (261 cards).', 'New Adventure region: The Verdant Reach.', 'Fixed targeting on split second spells.'] },
+      { version: 'Stable 2.0.13', date: 'May 2026', items: ['Improved AI mulligan decisions.', 'Commander bracket support in the lobby.', 'Deck editor: bulk-add from clipboard.'] },
+      { version: 'Stable 2.0.12', date: 'April 2026', items: ['Planar Conquest balance pass.', 'New avatars and card sleeves.'] },
+    ];
+
+    const isLight = s.theme === 'light';
+    return {
+      navGroups, headerTitle,
+      isHome: s.screen === 'home', isPlay: s.screen === 'play', isDecks: s.screen === 'decks',
+      isBattle: s.screen === 'battle', isSettings: s.screen === 'settings', isQuest: s.screen === 'quest',
+      toggleTheme: () => self.setTheme(isLight ? 'dark' : 'light'),
+      setDark: () => self.setTheme('dark'), setLight: () => self.setTheme('light'),
+      darkBtn: !isLight ? 'var(--gold)' : 'transparent', darkCol: !isLight ? '#1c1608' : 'var(--dim)',
+      lightBtn: isLight ? 'var(--gold)' : 'transparent', lightCol: isLight ? '#1c1608' : 'var(--dim)',
+      goBattle: () => self.go('battle'), goDecks: () => self.go('decks'), goPlay: () => self.go('play', 'constructed', { mode: 'Constructed', format: 'Constructed' }),
+      goQuest: () => self.go('quest', 'qduels'),
+      goNotes: () => self.go('settings', 'notes', { settingsCat: 'Release Notes' }),
+      goAvatars: () => self.go('settings', 'ava', { settingsCat: 'Avatars' }),
+      modes, recentDecks, news,
+      formats, deckOptions, opponents, oppDecks, variants, variantSummary, bestOf,
+      players, playerCount, addCol, addPlayer: () => self.addPlayer(),
+      mode: s.mode, life: s.life, best: s.best, chosenDeck: s.deck,
+      lifeUp: () => self.setState({ life: s.life + 1 }), lifeDown: () => self.setState({ life: Math.max(1, s.life - 1) }),
+      questStats, duels, challenges, questShops,
+      editorTypes, colorFilters, typeFilters, cmcMini, sortTabs, gridCards, curve, deckList,
+      oppLands, myLands, oppCreatures, myCreatures, phases, myHand,
+      oppMana: [C.R, C.R, C.B, C.B], myMana: [C.W, C.W, C.U, C.U, C.W],
+      oppLife: 14, myLife: 20, oppHand: 3,
+      settingsNav, toggles, achievements, avatars, downloads, releaseNotes,
+      catPrefs: s.settingsCat === 'Preferences', catAch: s.settingsCat === 'Achievements',
+      catAva: s.settingsCat === 'Avatars', catDl: s.settingsCat === 'Downloads', catNotes: s.settingsCat === 'Release Notes',
+      animSpeed: 'Swift', animPct: '68%',
+    };
+  }
+}
+</script>
+</body>
+</html>

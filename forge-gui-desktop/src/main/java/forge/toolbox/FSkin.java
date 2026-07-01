@@ -410,6 +410,60 @@ public class FSkin {
         }
     }
 
+    // Optional per-skin palette override read from "theme.txt" in the skin folder.
+    // Keys are Colors enum names (e.g. CLR_THEME); values are #RRGGBB or #AARRGGBB.
+    // Any color not listed falls back to the swatch in sprite_icons.png.
+    private static final Map<String, Color> themeColorOverrides = new HashMap<>();
+
+    private static void loadThemeColorOverrides() {
+        themeColorOverrides.clear();
+        final File themeFile = new File(preferredDir + "theme.txt");
+        if (!themeFile.exists()) {
+            return;
+        }
+        try {
+            for (String line : java.nio.file.Files.readAllLines(themeFile.toPath())) {
+                line = line.trim();
+                final int eq = line.indexOf('=');
+                if (line.startsWith("#") || eq <= 0) {
+                    continue;
+                }
+                final String key = line.substring(0, eq).trim();
+                final Color c = parseThemeColor(line.substring(eq + 1).trim());
+                if (c != null) {
+                    themeColorOverrides.put(key, c);
+                }
+            }
+        } catch (final Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static Color parseThemeColor(String s) {
+        if (s == null || s.isEmpty()) {
+            return null;
+        }
+        s = s.trim().split("\\s+")[0];
+        if (s.startsWith("#")) {
+            s = s.substring(1);
+        }
+        try {
+            if (s.length() == 6) {
+                return new Color(Integer.parseInt(s.substring(0, 2), 16),
+                        Integer.parseInt(s.substring(2, 4), 16),
+                        Integer.parseInt(s.substring(4, 6), 16));
+            } else if (s.length() == 8) { //AARRGGBB
+                return new Color(Integer.parseInt(s.substring(2, 4), 16),
+                        Integer.parseInt(s.substring(4, 6), 16),
+                        Integer.parseInt(s.substring(6, 8), 16),
+                        Integer.parseInt(s.substring(0, 2), 16));
+            }
+        } catch (final NumberFormatException e) {
+            //ignore malformed color, fall back to sprite swatch
+        }
+        return null;
+    }
+
     public enum Colors {
         CLR_THEME(FSkinProp.CLR_THEME),
         CLR_BORDERS(FSkinProp.CLR_BORDERS),
@@ -445,6 +499,7 @@ public class FSkin {
         }
 
         public static void updateAll() {
+            loadThemeColorOverrides();
             for (final Colors c : Colors.values()) {
                 c.updateColor();
             }
@@ -464,6 +519,11 @@ public class FSkin {
         }
 
         private void updateColor() {
+            final Color override = themeColorOverrides.get(this.name());
+            if (override != null) {
+                color = override;
+                return;
+            }
             int[] tempCoords = skinProp.getCoords();
             x0 = tempCoords[0];
             y0 = tempCoords[1];
@@ -1184,7 +1244,13 @@ public class FSkin {
 
         // Non-default (preferred) skin name and dir.
         preferredName = skinName.toLowerCase().replace(' ', '_');
-        preferredDir = preferredName.equalsIgnoreCase("default") || preferredName.isEmpty() ? ForgeConstants.DEFAULT_SKINS_DIR : ForgeConstants.CACHE_SKINS_DIR + preferredName + "/";
+        if (preferredName.equalsIgnoreCase("default") || preferredName.isEmpty()) {
+            preferredDir = ForgeConstants.DEFAULT_SKINS_DIR;
+        } else {
+            // Prefer a skin bundled in res/skins; otherwise fall back to a user-installed skin in the cache dir.
+            final String bundledDir = ForgeConstants.BASE_SKINS_DIR + preferredName + "/";
+            preferredDir = new File(bundledDir).isDirectory() ? bundledDir : ForgeConstants.CACHE_SKINS_DIR + preferredName + "/";
+        }
 
         if (onInit) {
             final File f = new File(preferredDir + ForgeConstants.SPLASH_BG_FILE);
@@ -1487,6 +1553,20 @@ public class FSkin {
     public static List<String> getSkinDirectoryNames() {
         final List<String> mySkins = new ArrayList<>();
 
+        // Bundled skins shipped in res/skins (besides the always-present "default").
+        final File baseDir = new File(ForgeConstants.BASE_SKINS_DIR);
+        final String[] baseChildren = baseDir.list();
+        if (baseChildren != null) {
+            for (String aChild : baseChildren) {
+                if (aChild.equalsIgnoreCase("default") || aChild.equalsIgnoreCase(".svn") || aChild.equalsIgnoreCase(".DS_Store")) {
+                    continue;
+                }
+                if (new File(ForgeConstants.BASE_SKINS_DIR + aChild).isDirectory() && !mySkins.contains(aChild)) {
+                    mySkins.add(aChild);
+                }
+            }
+        }
+
         final File dir = new File(ForgeConstants.CACHE_SKINS_DIR);
         final String[] children = dir.list();
         if (children == null) {
@@ -1499,7 +1579,9 @@ public class FSkin {
                 if (aChildren.equalsIgnoreCase(".DS_Store")) {
                     continue;
                 }
-                mySkins.add(aChildren);
+                if (!mySkins.contains(aChildren)) {
+                    mySkins.add(aChildren);
+                }
             }
         }
 
@@ -1798,7 +1880,7 @@ public class FSkin {
             UIManager.put("Button.foreground", FORE_COLOR);
             UIManager.put("Button.background", BACK_COLOR);
             UIManager.put("Button.select", HIGHLIGHT_COLOR);
-            UIManager.put("Button.focus", FORE_COLOR.darker());
+            UIManager.put("Button.focus", getColor(Colors.CLR_BORDERS).color);
             UIManager.put("Button.rollover", false);
         }
 

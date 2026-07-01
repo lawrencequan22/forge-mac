@@ -105,7 +105,7 @@ public class ForgePreferences extends PreferencesStore<ForgePreferences.FPref> {
         UI_SMALL_DECK_VIEWER ("false"),
         UI_DETAILED_SPELLDESC_IN_PROMPT ("true"),
         UI_GRAY_INACTIVE_TEXT ("true"),
-        UI_SKIN ("Default"),
+        UI_SKIN ("Umbral"),
         UI_CJK_FONT (""),
         UI_TARGETING_OVERLAY ("2"),
         UI_TIMED_TARGETING_OVERLAY_UPDATES ("true"),

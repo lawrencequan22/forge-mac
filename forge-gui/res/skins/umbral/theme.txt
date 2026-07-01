@@ -1,0 +1,16 @@
+# Umbral — dark "night plane" palette for Forge.
+# Matches the Forge.dc.html redesign (docs/redesign/Forge.dc.html).
+# Keys are FSkin.Colors enum names. Values are #RRGGBB or #AARRGGBB.
+# Any key omitted here falls back to the color swatch in sprite_icons.png.
+# Match-only colors (phase bar, targeting arrows) are intentionally left to
+# fall back so the in-game board keeps Forge's default behaviour.
+
+CLR_THEME=#141109
+CLR_THEME2=#1A1710
+CLR_BORDERS=#4D3F1F
+CLR_TEXT=#ECE6D6
+CLR_HOVER=#221E15
+CLR_ACTIVE=#D9B45F
+CLR_INACTIVE=#6F6857
+CLR_ZEBRA=#17140D
+CLR_OVERLAY=#0A0907

@@ -1,43 +1,25 @@
 package forge.screens.home;
 
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
+import java.awt.Insets;
 
 import javax.swing.SwingUtilities;
-import javax.swing.border.Border;
 
-import forge.localinstance.skin.FSkinProp;
+import forge.toolbox.FButton;
 import forge.toolbox.FSkin;
-import forge.toolbox.FSkin.SkinnedButton;
+import forge.util.Localizer;
 
 @SuppressWarnings("serial")
-public class StartButton extends SkinnedButton {
+public class StartButton extends FButton {
     public StartButton() {
-        setOpaque(false);
-        setContentAreaFilled(false);
-        setBorder((Border)null);
-        setBorderPainted(false);
-        setRolloverEnabled(true);
-        setRolloverIcon(FSkin.getIcon(FSkinProp.IMG_BTN_START_OVER));
-        setIcon(FSkin.getIcon(FSkinProp.IMG_BTN_START_UP));
-        setPressedIcon(FSkin.getIcon(FSkinProp.IMG_BTN_START_DOWN));
+        super(Localizer.getInstance().getMessage("lblStart"));
+        setPrimary(true);
+        setFont(FSkin.getBoldFont(20));
+        setMargin(new Insets(8, 46, 8, 46));
         // Accessible name.
         this.getAccessibleContext().setAccessibleName("Start game");
-        addFocusListener(new FocusListener() {
-            @Override
-            public void focusLost(FocusEvent arg0) {
-                setIcon(FSkin.getIcon(FSkinProp.IMG_BTN_START_UP));
-            }
-            
-            @Override
-            public void focusGained(FocusEvent arg0) {
-                setIcon(FSkin.getIcon(FSkinProp.IMG_BTN_START_OVER));
-            }
-        });
-        
+
         addActionListener(e -> {
             setEnabled(false);
-
             // ensure the click action can resolve before we allow the button to be clicked again
             SwingUtilities.invokeLater(() -> setEnabled(true));
         });

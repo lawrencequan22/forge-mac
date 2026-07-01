@@ -26,5 +26,7 @@ public class FRadioButton  extends SkinnedRadioButton {
         this.setForeground(FSkin.getColor(FSkin.Colors.CLR_TEXT));
         this.setFont(FSkin.getFont(14));
         this.setOpaque(false);
+        this.setIcon(new ModernToggleIcons.Radio());
+        this.setRolloverEnabled(true);
     }
 }

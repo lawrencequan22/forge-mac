@@ -93,6 +93,9 @@ public enum VHomeUI implements IVTopLevelUI {
     private final PnlDisplay pnlDisplay = new PnlDisplay();
     private final FScrollPanel pnlSubmenus;
 
+    private CommandCenter commandCenter;
+    private JPanel pnlInsets;
+
     private JLabel lblLogo = new FLabel.Builder()
         .icon(FSkin.getIcon(FSkinProp.ICO_LOGO))
         .iconAlignX(SwingConstants.CENTER)
@@ -109,6 +112,13 @@ public enum VHomeUI implements IVTopLevelUI {
 
         pnlMainMenu.add(lblLogo, "w " + logoSize + "px!, h " + logoSize +
                 "px!, gap 0 4px 0 " + logoBottomGap + "px");
+        lblLogo.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.HAND_CURSOR));
+        lblLogo.setToolTipText("Return to Command Center");
+        lblLogo.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override public void mousePressed(final java.awt.event.MouseEvent e) {
+                showDashboard();
+            }
+        });
         pnlMenu.add(pnlMainMenu);
         
         pnlSubmenus = new FScrollPanel(new MigLayout("insets 0, gap 0, wrap, hidemode 3"), true,
@@ -219,9 +229,32 @@ public enum VHomeUI implements IVTopLevelUI {
         JPanel pnl = FView.SINGLETON_INSTANCE.getPnlInsets();
         pnl.setBorder(null);
         pnl.setLayout(new MigLayout("insets 0, gap 0"));
+        pnlInsets = pnl;
 
-        pnl.add(pnlMenu, "w 205px!, h 100%!");
-        pnl.add(pnlDisplay, "w 100% - 205px!, h 100%!");
+        if (commandCenter == null) {
+            commandCenter = new CommandCenter();
+        }
+        // Land on the redesigned Command Center dashboard.
+        showDashboard();
+    }
+
+    /** Show the redesigned Command Center landing (full-bleed). */
+    public void showDashboard() {
+        if (pnlInsets == null) { return; }
+        pnlInsets.removeAll();
+        pnlInsets.add(commandCenter, "w 100%!, h 100%!");
+        pnlInsets.revalidate();
+        pnlInsets.repaint();
+    }
+
+    /** Show the classic menu + submenu content layout (used when a mode is opened). */
+    public void showMenus() {
+        if (pnlInsets == null) { return; }
+        pnlInsets.removeAll();
+        pnlInsets.add(pnlMenu, "w 205px!, h 100%!");
+        pnlInsets.add(pnlDisplay, "w 100% - 205px!, h 100%!");
+        pnlInsets.revalidate();
+        pnlInsets.repaint();
     }
 
     /** */

@@ -76,7 +76,7 @@ public class VLobby implements ILobbyView {
     private final JComboBox<String> gamesInMatch = new JComboBox<>(new String[]{"1", "3", "5"});
     private final SwingPrefBinders.ComboBox gamesInMatchBinder = new SwingPrefBinders.ComboBox(FPref.UI_MATCHES_PER_GAME, gamesInMatch);
     private final JPanel gamesInMatchFrame = new JPanel(new MigLayout("insets 0, gap 0, wrap 2"));
-    private final JPanel constructedFrame = new JPanel(new MigLayout("insets 0, gap 0, wrap 2, hidemode 3")); // Main content frame
+    private final JPanel constructedFrame = new JPanel(new MigLayout("insets 18 28 14 28, gap 0, wrap 2, hidemode 3")); // Main content frame (redesign: mockup padding)
 
     // Variants frame and variables
     private final FPanel variantsPanel = new FPanel(new MigLayout("insets 10, gapx 10"));

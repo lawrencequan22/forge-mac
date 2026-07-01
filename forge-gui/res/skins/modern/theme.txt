@@ -1,0 +1,15 @@
+# Modern (Arena-lite) palette override for Forge.
+# Keys are FSkin.Colors enum names. Values are #RRGGBB or #AARRGGBB.
+# Any key omitted here falls back to the color swatch in sprite_icons.png.
+# Match-only colors (phase bar, targeting arrows) are intentionally left to
+# fall back so the in-game board is only recolored via the shared base colors.
+
+CLR_THEME=#0E1420
+CLR_THEME2=#141C29
+CLR_BORDERS=#5A4A2A
+CLR_TEXT=#ECE6D6
+CLR_HOVER=#202B3D
+CLR_ACTIVE=#C9A24B
+CLR_INACTIVE=#6B6656
+CLR_ZEBRA=#18212F
+CLR_OVERLAY=#0A0E15

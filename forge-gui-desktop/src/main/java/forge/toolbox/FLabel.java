@@ -254,6 +254,12 @@ public class FLabel extends SkinnedLabel implements ILocalRepaint, IButton {
     private static final SkinColor l10 = clrMain.stepColor(10);
     private static final SkinColor l20 = clrMain.stepColor(20);
     private static final SkinColor l30 = clrMain.stepColor(30);
+    //flat "Arena-lite" button colors
+    private static final SkinColor clrBtnFill = FSkin.getColor(FSkin.Colors.CLR_THEME2);
+    private static final SkinColor clrBtnFillDown = FSkin.getColor(FSkin.Colors.CLR_THEME);
+    private static final SkinColor clrBtnBorder = FSkin.getColor(FSkin.Colors.CLR_BORDERS);
+    private static final SkinColor clrAccent = FSkin.getColor(FSkin.Colors.CLR_ACTIVE);
+    private static int btnArc(final int h) { return Math.min(h, 16); }
 
     // Custom properties, assigned either at realization (using builder)
     // or dynamically (using methods below).
@@ -610,47 +616,41 @@ public class FLabel extends SkinnedLabel implements ILocalRepaint, IButton {
     }
 
     private static void paintFocus(final Graphics2D g, final int w, final int h) {
-        FSkin.setGraphicsColor(g, clrHover);
-        g.drawRect(0, 0, w - 2, h - 2);
-        FSkin.setGraphicsColor(g, l30);
-        g.drawRect(1, 1, w - 4, h - 4);
+        final int arc = btnArc(h);
+        FSkin.setGraphicsColor(g, clrAccent);
+        g.drawRoundRect(0, 0, w - 1, h - 1, arc, arc);
     }
 
     private static void paintPressed(final Graphics2D g, final int w, final int h) {
-        FSkin.setGraphicsGradientPaint(g, 0, h, d50, 0, 0, d10);
-        g.fillRect(0, 0, w - 1, h - 1);
-
-        FSkin.setGraphicsColor(g, d50);
-        g.drawRect(0, 0, w - 2, h - 2);
-        FSkin.setGraphicsColor(g, d10);
-        g.drawRect(1, 1, w - 4, h - 4);
+        final int arc = btnArc(h);
+        FSkin.setGraphicsColor(g, clrBtnFillDown);
+        g.fillRoundRect(0, 0, w - 1, h - 1, arc, arc);
+        FSkin.setGraphicsColor(g, clrAccent);
+        g.drawRoundRect(0, 0, w - 1, h - 1, arc, arc);
     }
 
     private static void paintUp(final Graphics2D g, final int w, final int h) {
-        FSkin.setGraphicsGradientPaint(g, 0, h, d10, 0, 0, l20);
-        g.fillRect(0, 0, w, h);
-
-        FSkin.setGraphicsColor(g, d50);
-        g.drawRect(0, 0, w - 2, h - 2);
-        FSkin.setGraphicsColor(g, l10);
-        g.drawRect(1, 1, w - 4, h - 4);
+        final int arc = btnArc(h);
+        FSkin.setGraphicsColor(g, clrBtnFill);
+        g.fillRoundRect(0, 0, w - 1, h - 1, arc, arc);
+        FSkin.setGraphicsColor(g, clrBtnBorder);
+        g.drawRoundRect(0, 0, w - 1, h - 1, arc, arc);
     }
 
     private static void paintBorder(final Graphics2D g, final int w, final int h) {
-        FSkin.setGraphicsColor(g, l10);
-        g.drawRect(0, 0, w - 2, h - 2);
-        FSkin.setGraphicsColor(g, l30);
-        g.drawRect(1, 1, w - 4, h - 4);
+        final int arc = btnArc(h);
+        FSkin.setGraphicsColor(g, clrBtnBorder);
+        g.drawRoundRect(0, 0, w - 1, h - 1, arc, arc);
     }
 
     private static void paintDown(final Graphics2D g, final int w, final int h) {
-        FSkin.setGraphicsGradientPaint(g, 0, h, d30, 0, 0, l10);
-        g.fillRect(0, 0, w - 1, h - 1);
-
-        FSkin.setGraphicsColor(g, d30);
-        g.drawRect(0, 0, w - 2, h - 2);
-        FSkin.setGraphicsColor(g, l10);
-        g.drawRect(1, 1, w - 4, h - 4);
+        final int arc = btnArc(h);
+        FSkin.setGraphicsColor(g, clrBtnFill);
+        g.fillRoundRect(0, 0, w - 1, h - 1, arc, arc);
+        FSkin.setGraphicsColor(g, clrAccent.alphaColor(48));
+        g.fillRoundRect(0, 0, w - 1, h - 1, arc, arc);
+        FSkin.setGraphicsColor(g, clrAccent);
+        g.drawRoundRect(0, 0, w - 1, h - 1, arc, arc);
     }
 
     protected void resetIcon() {

@@ -18,6 +18,7 @@
 package forge.toolbox;
 
 import java.awt.AlphaComposite;
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FontMetrics;
@@ -56,6 +57,7 @@ public class FButton extends SkinnedButton implements ILocalRepaint, IButton {
     private int w, h = 0;
     private boolean allImagesPresent = false;
     private boolean toggle = false;
+    private boolean primary = false;
     private boolean hovered = false;
     private final AlphaComposite disabledComposite = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.25f);
     private KeyAdapter klEnter;
@@ -190,6 +192,12 @@ public class FButton extends SkinnedButton implements ILocalRepaint, IButton {
         return toggle;
     }
 
+    /** Render this button as a filled gold primary action (e.g. Start / Play). */
+    public void setPrimary(final boolean b0) {
+        this.primary = b0;
+        repaintSelf();
+    }
+
     /** @param b0 &emsp; boolean. */
     public void setToggled(final boolean b0) {
         if (b0) {
@@ -227,27 +235,63 @@ public class FButton extends SkinnedButton implements ILocalRepaint, IButton {
 
     @Override
     protected void paintComponent(final Graphics g) {
-        if (!allImagesPresent) {
-            return;
+        w = getWidth();
+        h = getHeight();
+
+        // Flat "Arena-lite" vector painting (replaces the old 3-slice sprite button).
+        // Default is a quiet secondary button (dark fill + muted-gold hairline); the gold
+        // accent is reserved for hover/focus and the toggled "selected" state so the app
+        // isn't flooded with gold.
+        final Color theme2   = FSkin.getColor(Colors.CLR_THEME2).color;
+        final Color themeDk  = FSkin.getColor(Colors.CLR_THEME).color;
+        final Color hoverClr = FSkin.getColor(Colors.CLR_HOVER).color;
+        final Color borders  = FSkin.getColor(Colors.CLR_BORDERS).color;
+        final Color gold     = FSkin.getColor(Colors.CLR_ACTIVE).color;
+        final Color textClr  = FSkin.getColor(Colors.CLR_TEXT).color;
+        final Color inactive = FSkin.getColor(Colors.CLR_INACTIVE).color;
+
+        Color fill, border, foreground;
+        Color goldWash = null;
+        if (!isEnabled()) {
+            fill = theme2; border = inactive; foreground = inactive;
+        } else if (primary) {
+            if (getModel().isPressed()) { fill = FSkin.getColor(Colors.CLR_ACTIVE).stepColor(-30).color; }
+            else if (hovered) { fill = FSkin.getColor(Colors.CLR_ACTIVE).stepColor(30).color; }
+            else { fill = gold; }
+            border = FSkin.getColor(Colors.CLR_ACTIVE).stepColor(-45).color;
+            foreground = FSkin.getColor(Colors.CLR_OVERLAY).color;
+        } else if (isToggled()) {
+            fill = theme2; border = gold; foreground = gold;
+            goldWash = new Color(gold.getRed(), gold.getGreen(), gold.getBlue(), 46);
+        } else if (getModel().isPressed()) {
+            fill = themeDk; border = gold; foreground = textClr;
+        } else if (hovered) {
+            fill = hoverClr; border = gold; foreground = textClr;
+        } else if (isFocusOwner()) {
+            fill = theme2; border = gold; foreground = textClr;
+        } else {
+            fill = theme2; border = borders; foreground = textClr;
         }
 
-        final Graphics2D g2d = (Graphics2D) g;
+        final Graphics2D g2d = (Graphics2D) g.create();
         g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
         g2d.setRenderingHint(RenderingHints.KEY_FRACTIONALMETRICS, RenderingHints.VALUE_FRACTIONALMETRICS_ON);
 
-        if (!isEnabled()) {
-            g2d.setComposite(this.disabledComposite);
+        final int arc = Math.min(h, 18);
+        g2d.setColor(fill);
+        g2d.fillRoundRect(0, 0, w - 1, h - 1, arc, arc);
+        if (goldWash != null) {
+            g2d.setColor(goldWash);
+            g2d.fillRoundRect(0, 0, w - 1, h - 1, arc, arc);
         }
+        g2d.setStroke(new BasicStroke(1f));
+        g2d.setColor(border);
+        g2d.drawRoundRect(0, 0, w - 1, h - 1, arc, arc);
+        g2d.dispose();
 
-        w = getWidth();
-        h = getHeight();
-
-        FSkin.drawImage(g2d, imgL, 0, 0, this.h, this.h);
-        FSkin.drawImage(g2d, imgM, this.h, 0, this.w - (2 * this.h), this.h);
-        FSkin.drawImage(g2d, imgR, this.w - this.h, 0, this.h, this.h);
-
+        setForeground(foreground);
         super.paintComponent(g);
     }
 

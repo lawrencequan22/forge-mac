@@ -1,0 +1,17 @@
+# Radiant — light "parchment plane" palette for Forge.
+# Matches the Forge.dc.html redesign (docs/redesign/Forge.dc.html).
+# Keys are FSkin.Colors enum names. Values are #RRGGBB or #AARRGGBB.
+# Any key omitted here falls back to the color swatch in sprite_icons.png.
+# NOTE: this is Forge's first light theme; sprite_icons.png glyphs are authored
+# for dark skins, so some icons may read low-contrast until a light icon sheet
+# is produced. Match-only colors are left to fall back.
+
+CLR_THEME=#ECE3CD
+CLR_THEME2=#F6EFDD
+CLR_BORDERS=#B89B52
+CLR_TEXT=#2B2418
+CLR_HOVER=#E7DCC0
+CLR_ACTIVE=#9C7A2B
+CLR_INACTIVE=#94886C
+CLR_ZEBRA=#E9E0C9
+CLR_OVERLAY=#D9CDAF

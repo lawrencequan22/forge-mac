@@ -213,6 +213,12 @@ public class PlayerPanel extends FPanel {
         this.setPlayerName(slot == null ? "" : slot.getName());
         this.setAvatarIndex(slot == null ? 0 : slot.getAvatarIndex());
 
+        // --- Command Center seat-card styling (redesign; visual only) ---
+        setCornerDiameter(13);
+        setBackground(FSkin.getColor(FSkin.Colors.CLR_HOVER)); // panel2 fill
+        setBorderColor(FSkin.getColor(index == 0 ? FSkin.Colors.CLR_ACTIVE : FSkin.Colors.CLR_BORDERS));
+        setBorderToggle(true);
+
         update();
     }
 
