@@ -110,8 +110,8 @@
           <div style="position:absolute; inset:0; background:radial-gradient(90% 130% at 88% 20%, rgba(154,120,196,0.34), transparent 60%), linear-gradient(90deg, rgba(13,12,10,0.94) 30%, rgba(13,12,10,0.2) 75%);"></div>
           <div style="position:relative; padding:38px 42px; display:flex; flex-direction:column; justify-content:center; max-width:600px;">
             <div style="display:inline-flex; align-self:flex-start; align-items:center; gap:8px; padding:6px 13px; border-radius:100px; background:rgba(217,180,95,0.12); border:1px solid var(--line); font-size:10px; letter-spacing:0.2em; text-transform:uppercase; color:var(--gold-b); margin-bottom:16px;">◆ Quest · Continue Campaign</div>
-            <div style="font-family:'Cinzel',serif; font-size:40px; line-height:1.02; font-weight:700; color:var(--text); letter-spacing:0.01em;">The Shadowmoor Gambit</div>
-            <div style="font-size:14px; color:var(--dim); margin-top:13px; line-height:1.6; max-width:440px;">Resume your quest — battle tuned AI, earn credits, and grow your collection across a persistent campaign.</div>
+            <div style="font-family:'Cinzel',serif; font-size:40px; line-height:1.02; font-weight:700; color:var(--text); letter-spacing:0.01em;">{{ heroTitle }}</div>
+            <div style="font-size:14px; color:var(--dim); margin-top:13px; line-height:1.6; max-width:440px;">{{ heroDesc }}</div>
             <div style="display:flex; gap:12px; margin-top:24px;">
               <button onClick="{{ goQuest }}" style="display:inline-flex; align-items:center; gap:10px; height:46px; padding:0 26px; border:none; border-radius:12px; cursor:pointer; font-family:'Sora'; font-weight:600; font-size:14px; color:#1c1608; background:linear-gradient(150deg,var(--gold-b),var(--gold)); box-shadow:0 12px 28px -10px rgba(217,180,95,0.6);" style-hover="filter:brightness(1.06)">▸ Resume Quest</button>
               <button onClick="{{ goQuest }}" style="height:46px; padding:0 22px; border-radius:12px; cursor:pointer; font-family:'Sora'; font-weight:500; font-size:14px; color:var(--text); background:var(--panel2); border:1px solid var(--line);" style-hover="border-color:var(--gold-d)">Spell Shop</button>
@@ -656,7 +656,12 @@ class Component extends DCLogic {
   componentDidMount() { this.applyTheme(this.state.theme); }
   applyTheme(t) { document.documentElement.setAttribute('data-theme', t === 'light' ? 'light' : ''); }
   setTheme(t) { this.applyTheme(t); this.setState({ theme: t }); }
-  go(screen, active, extra) { this.setState({ screen, active: active || screen, ...(extra || {}) }); const sec = document.querySelector('section'); if (sec) sec.scrollTop = 0; }
+  go(screen, active, extra) {
+    // Deck Editor hands off to Forge's native editor when embedded.
+    if (screen === 'decks' && typeof window !== 'undefined' && window.forge) { window.forge.openDeckEditor(); return; }
+    this.setState({ screen, active: active || screen, ...(extra || {}) }); const sec = document.querySelector('section'); if (sec) sec.scrollTop = 0;
+  }
+  openSub(id) { if (typeof window !== 'undefined' && window.forge) { window.forge.openSubmenu(id); } }
   addPlayer() { this.setState(st => st.players.length >= 8 ? null : ({ players: [...st.players, { id: st.nextPid, name: 'Opponent ' + st.players.length, type: 'AI', deck: 'Random' }], nextPid: st.nextPid + 1 })); }
   removePlayer(id) { this.setState(st => ({ players: st.players.filter(p => p.id !== id), openDeck: st.openDeck === id ? null : st.openDeck })); }
   setPlayerType(id, type) { this.setState(st => ({ players: st.players.map(p => p.id === id ? { ...p, type } : p) })); }
@@ -729,17 +734,44 @@ class Component extends DCLogic {
       { name: 'Planar Conquest', tag: 'Campaign', desc: 'Conquer planes, unlock commanders.', accent: 'var(--b)', glow: 'rgba(154,120,196,0.4)', go: () => self.go('play', 'conquest', { mode: 'Planar Conquest', format: 'Commander' }) },
     ].map(m => ({ ...m, onClick: m.go }));
 
-    const recentDecks = [
-      { name: 'Azorius Control', meta: 'Constructed · edited 2h ago', grad: 'linear-gradient(140deg,var(--w),var(--u))', pips: [C.W, C.U], count: '60 cards' },
-      { name: 'Gruul Aggro', meta: 'Constructed · edited yesterday', grad: 'linear-gradient(140deg,var(--r),var(--g))', pips: [C.R, C.G], count: '60 cards' },
-      { name: 'Prossh, Skyraider', meta: 'Commander · edited 3d ago', grad: 'linear-gradient(140deg,var(--r),var(--g))', pips: [C.B, C.R, C.G], count: '100 cards' },
-    ].map(d => ({ ...d, onClick: () => self.go('decks') }));
+    // Real data from Forge (window.FORGE_DATA, populated by the bridge) with sample fallback.
+    const FD = (typeof window !== 'undefined' && window.FORGE_DATA) || {};
+    const grad2 = (cols) => { const a = C[(cols && cols[0]) || 'U'] || C.U; const b = C[(cols && cols[1]) || (cols && cols[0]) || 'U'] || a; return 'linear-gradient(140deg,' + a + ',' + b + ')'; };
+    const heroActive = FD.quest && FD.quest.active;
+    const heroTitle = heroActive ? FD.quest.name : 'Begin a New Quest';
+    const heroDesc = heroActive
+      ? ('Credits ' + FD.quest.credits + ' · Life ' + FD.quest.life + ' · ' + FD.quest.wins + 'W / ' + FD.quest.losses + 'L')
+      : 'Battle tuned AI, earn credits, and grow your collection across a persistent campaign.';
+    // Fake sample data is ONLY for a bare browser preview (no bridge). In-app, show real
+    // data, or an honest empty state — never fabricated decks/notes.
+    const HAS_BRIDGE = typeof window !== 'undefined' && !!window.forge;
+    let recentSrc;
+    if (FD.recentDecks && FD.recentDecks.length) {
+      recentSrc = FD.recentDecks.map(d => ({ name: d.name, meta: d.meta, grad: grad2(d.colors), pips: (d.colors || []).map(c => C[c]), count: (d.count || 0) + ' cards' }));
+    } else if (HAS_BRIDGE) {
+      recentSrc = [{ name: 'No saved decks yet', meta: 'Open the Deck Editor to build one', grad: 'linear-gradient(140deg,var(--panel2),var(--raise))', pips: [], count: '' }];
+    } else {
+      recentSrc = [
+        { name: 'Azorius Control', meta: 'Constructed · edited 2h ago', grad: 'linear-gradient(140deg,var(--w),var(--u))', pips: [C.W, C.U], count: '60 cards' },
+        { name: 'Gruul Aggro', meta: 'Constructed · edited yesterday', grad: 'linear-gradient(140deg,var(--r),var(--g))', pips: [C.R, C.G], count: '60 cards' },
+        { name: 'Prossh, Skyraider', meta: 'Commander · edited 3d ago', grad: 'linear-gradient(140deg,var(--r),var(--g))', pips: [C.B, C.R, C.G], count: '100 cards' },
+      ];
+    }
+    const recentDecks = recentSrc.map(d => ({ ...d, onClick: () => self.go('decks') }));
 
-    const news = [
-      { tag: 'Snapshot', title: 'Bloomburrow set fully implemented — 261 cards added.' },
-      { tag: 'Adventure', title: 'The Verdant Reach region opens in Shandalar.' },
-      { tag: 'Engine', title: 'AI drafting logic improved for multicolor archetypes.' },
-    ].map(n => ({ ...n, onClick: () => self.go('settings', 'notes', { settingsCat: 'Release Notes' }) }));
+    let newsSrc;
+    if (FD.releaseNotes && FD.releaseNotes.length) {
+      newsSrc = FD.releaseNotes;
+    } else if (HAS_BRIDGE) {
+      newsSrc = [{ tag: 'Forge', title: 'You are on the latest build.' }];
+    } else {
+      newsSrc = [
+        { tag: 'Snapshot', title: 'Bloomburrow set fully implemented — 261 cards added.' },
+        { tag: 'Adventure', title: 'The Verdant Reach region opens in Shandalar.' },
+        { tag: 'Engine', title: 'AI drafting logic improved for multicolor archetypes.' },
+      ];
+    }
+    const news = newsSrc.map(n => ({ ...n, onClick: () => self.openSub('HOME_RELEASE_NOTES') }));
 
     // ---------- play / lobby ----------
     const formats = ['Constructed', 'Commander', 'Draft', 'Sealed'].map(n => ({
@@ -983,7 +1015,7 @@ class Component extends DCLogic {
       goQuest: () => self.go('quest', 'qduels'),
       goNotes: () => self.go('settings', 'notes', { settingsCat: 'Release Notes' }),
       goAvatars: () => self.go('settings', 'ava', { settingsCat: 'Avatars' }),
-      modes, recentDecks, news,
+      modes, recentDecks, news, heroTitle, heroDesc,
       formats, deckOptions, opponents, oppDecks, variants, variantSummary, bestOf,
       players, playerCount, addCol, addPlayer: () => self.addPlayer(),
       mode: s.mode, life: s.life, best: s.best, chosenDeck: s.deck,

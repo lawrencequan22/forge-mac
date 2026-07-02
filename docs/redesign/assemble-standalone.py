@@ -29,6 +29,17 @@ RUNTIME = r"""
     }
     componentDidMount(){}
   };
+  window.FORGE_DATA = {};
+  window.__onForgeReady = function(){
+    try {
+      if (window.forge) {
+        window.FORGE_DATA.recentDecks = JSON.parse(window.forge.getRecentDecks() || '[]');
+        window.FORGE_DATA.releaseNotes = JSON.parse(window.forge.getReleaseNotes() || '[]');
+        window.FORGE_DATA.quest = JSON.parse(window.forge.getQuest() || '{}');
+      }
+    } catch(e) { console.error('forge data', e); }
+    if (window.__dcRender) window.__dcRender();
+  };
   function process(node, scope, out){
     if(node.nodeType===3){ var t=node.nodeValue; out.appendChild(document.createTextNode(hasB(t)?interp(t,scope):t)); return; }
     if(node.nodeType!==1) return;

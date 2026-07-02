@@ -28,7 +28,21 @@ public class WebDesignScreen extends JPanel {
             try {
                 final javafx.scene.web.WebView web = new javafx.scene.web.WebView();
                 web.setContextMenuEnabled(false);
-                web.getEngine().load(url);
+                final javafx.scene.web.WebEngine engine = web.getEngine();
+                // Expose the Forge bridge (window.forge) once the page is ready.
+                engine.getLoadWorker().stateProperty().addListener((obs, oldSt, newSt) -> {
+                    if (newSt == javafx.concurrent.Worker.State.SUCCEEDED) {
+                        try {
+                            final netscape.javascript.JSObject win =
+                                    (netscape.javascript.JSObject) engine.executeScript("window");
+                            win.setMember("forge", new ForgeBridge());
+                            engine.executeScript("if (window.__onForgeReady) { window.__onForgeReady(); }");
+                        } catch (final Throwable t) {
+                            System.err.println("Forge bridge attach failed: " + t);
+                        }
+                    }
+                });
+                engine.load(url);
                 final javafx.scene.Scene scene = new javafx.scene.Scene(web);
                 fxPanel.setScene(scene);
             } catch (final Throwable t) {
