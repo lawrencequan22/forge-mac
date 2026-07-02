@@ -772,8 +772,19 @@ class Component extends DCLogic {
     const C = { W: 'var(--w)', U: 'var(--u)', B: 'var(--b)', R: 'var(--r)', G: 'var(--g)' };
 
     // ---------- sidebar: real Forge menu structure ----------
+    // Items mapped here hand off to the real native Forge screen (via the bridge) instead of
+    // the design's placeholder screen. Home + Constructed stay in the design.
+    const EDOC = {
+      draft: 'HOME_DRAFT', sealed: 'HOME_SEALED',
+      qnew: 'HOME_QUESTSTART', qduels: 'HOME_QUESTDUELS', qchal: 'HOME_QUESTCHALLENGES',
+      qdraft: 'HOME_QUESTDRAFTS', qdecks: 'HOME_QUESTDECKS',
+      gauntlet: 'HOME_GAUNTLETQUICK', puzzle: 'HOME_PUZZLE_SOLVE', online: 'HOME_NETWORK',
+      prefs: 'HOME_PREFERENCES', ach: 'HOME_ACHIEVEMENTS', ava: 'HOME_AVATARS',
+      dl: 'HOME_UTILITIES', notes: 'HOME_RELEASE_NOTES',
+    };
     const item = (id, label, screen, extra) => ({
-      id, label, active: s.active === id, onClick: () => self.go(screen, id, extra),
+      id, label, active: s.active === id,
+      onClick: () => { if (EDOC[id] && typeof window !== 'undefined' && window.forge) { self.openSub(EDOC[id]); } else { self.go(screen, id, extra); } },
       bg: s.active === id ? 'var(--panel)' : 'transparent',
       color: s.active === id ? 'var(--gold-b)' : 'var(--dim)',
       mark: s.active === id ? 'var(--gold-b)' : 'var(--mute)',
@@ -822,13 +833,13 @@ class Component extends DCLogic {
     // ---------- home ----------
     const modes = [
       { name: 'Constructed', tag: 'Sanctioned', desc: 'Bring a 60-card deck vs AI.', accent: 'var(--u)', glow: 'rgba(90,151,221,0.45)', go: () => self.go('play', 'constructed', { mode: 'Constructed', format: 'Constructed' }) },
-      { name: 'Booster Draft', tag: 'Limited', desc: 'Open packs, pick, and build.', accent: 'var(--g)', glow: 'rgba(95,176,111,0.45)', go: () => self.go('play', 'draft', { mode: 'Booster Draft', format: 'Draft' }) },
-      { name: 'Sealed Deck', tag: 'Limited', desc: 'Six packs, one pool.', accent: 'var(--r)', glow: 'rgba(219,92,72,0.45)', go: () => self.go('play', 'sealed', { mode: 'Sealed', format: 'Sealed' }) },
+      { name: 'Booster Draft', tag: 'Limited', desc: 'Open packs, pick, and build.', accent: 'var(--g)', glow: 'rgba(95,176,111,0.45)', edoc: 'HOME_DRAFT', go: () => self.go('play', 'draft', { mode: 'Booster Draft', format: 'Draft' }) },
+      { name: 'Sealed Deck', tag: 'Limited', desc: 'Six packs, one pool.', accent: 'var(--r)', glow: 'rgba(219,92,72,0.45)', edoc: 'HOME_SEALED', go: () => self.go('play', 'sealed', { mode: 'Sealed', format: 'Sealed' }) },
       { name: 'Commander', tag: 'Variant', desc: '100-card singleton duels.', accent: 'var(--b)', glow: 'rgba(154,120,196,0.45)', go: () => self.go('play', 'constructed', { mode: 'Commander', format: 'Commander' }) },
-      { name: 'Quest', tag: 'Campaign', desc: 'Earn credits, grow a collection.', accent: 'var(--g)', glow: 'rgba(95,176,111,0.4)', go: () => self.go('quest', 'qduels') },
-      { name: 'Gauntlet', tag: 'Series', desc: 'Run a ladder of opponents.', accent: 'var(--r)', glow: 'rgba(219,92,72,0.4)', go: () => self.go('play', 'gauntlet', { mode: 'Gauntlet', format: 'Constructed' }) },
-      { name: 'Puzzle', tag: 'Solve', desc: 'Win from a fixed board state.', accent: 'var(--u)', glow: 'rgba(90,151,221,0.4)', go: () => self.go('quest', 'puzzle') },
-    ].map(m => ({ ...m, onClick: m.go }));
+      { name: 'Quest', tag: 'Campaign', desc: 'Earn credits, grow a collection.', accent: 'var(--g)', glow: 'rgba(95,176,111,0.4)', edoc: 'HOME_QUESTDUELS', go: () => self.go('quest', 'qduels') },
+      { name: 'Gauntlet', tag: 'Series', desc: 'Run a ladder of opponents.', accent: 'var(--r)', glow: 'rgba(219,92,72,0.4)', edoc: 'HOME_GAUNTLETQUICK', go: () => self.go('play', 'gauntlet', { mode: 'Gauntlet', format: 'Constructed' }) },
+      { name: 'Puzzle', tag: 'Solve', desc: 'Win from a fixed board state.', accent: 'var(--u)', glow: 'rgba(90,151,221,0.4)', edoc: 'HOME_PUZZLE_SOLVE', go: () => self.go('quest', 'puzzle') },
+    ].map(m => ({ ...m, onClick: (m.edoc && typeof window !== 'undefined' && window.forge) ? () => self.openSub(m.edoc) : m.go }));
 
     // Real data from Forge (window.FORGE_DATA, populated by the bridge) with sample fallback.
     const FD = (typeof window !== 'undefined' && window.FORGE_DATA) || {};
@@ -1108,9 +1119,9 @@ class Component extends DCLogic {
       darkBtn: !isLight ? 'var(--gold)' : 'transparent', darkCol: !isLight ? '#1c1608' : 'var(--dim)',
       lightBtn: isLight ? 'var(--gold)' : 'transparent', lightCol: isLight ? '#1c1608' : 'var(--dim)',
       goBattle: () => self.go('battle'), goDecks: () => self.go('decks'), goPlay: () => self.go('play', 'constructed', { mode: 'Constructed', format: 'Constructed' }),
-      goQuest: () => self.go('quest', 'qduels'),
-      goNotes: () => self.go('settings', 'notes', { settingsCat: 'Release Notes' }),
-      goAvatars: () => self.go('settings', 'ava', { settingsCat: 'Avatars' }),
+      goQuest: () => { if (typeof window !== 'undefined' && window.forge) { self.openSub('HOME_QUESTSTART'); } else { self.go('quest', 'qduels'); } },
+      goNotes: () => { if (typeof window !== 'undefined' && window.forge) { self.openSub('HOME_RELEASE_NOTES'); } else { self.go('settings', 'notes', { settingsCat: 'Release Notes' }); } },
+      goAvatars: () => { if (typeof window !== 'undefined' && window.forge) { self.openSub('HOME_AVATARS'); } else { self.go('settings', 'ava', { settingsCat: 'Avatars' }); } },
       modes, recentDecks, news, heroTitle, heroDesc,
       formats, deckOptions, opponents, oppDecks, variants, variantSummary, bestOf,
       players, playerCount, addCol, addPlayer: () => self.addPlayer(),
