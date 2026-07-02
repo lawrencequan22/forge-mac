@@ -127,6 +127,17 @@ build_edition() {
   # APFS copy-on-write clone of res (instant, no extra disk); fall back to rsync.
   cp -Rc forge-gui/res "$stage/res" 2>/dev/null || rsync -a forge-gui/res "$stage/"
 
+  # Redesign: bundle JavaFX (arm64) so the desktop home can host the HTML design in a
+  # WebView. jpackage puts every jar in --input on the classpath. Desktop only.
+  if [ "$edition" = "desktop" ]; then
+    JFX_VER=17.0.13
+    for a in javafx-base javafx-graphics javafx-media javafx-controls javafx-swing javafx-web; do
+      jfx_jar="$HOME/.m2/repository/org/openjfx/$a/$JFX_VER/$a-$JFX_VER-mac-aarch64.jar"
+      if [ -f "$jfx_jar" ]; then cp "$jfx_jar" "$stage/"; else
+        echo "WARN: missing $jfx_jar (WebView home will fall back to Command Center)"; fi
+    done
+  fi
+
   echo "==> [$edition] jpackage: building \"$app_name.app\" ..."
   jpackage --type app-image \
     --name "$app_name" --app-version "$APP_VERSION" \

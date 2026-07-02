@@ -94,6 +94,8 @@ public enum VHomeUI implements IVTopLevelUI {
     private final FScrollPanel pnlSubmenus;
 
     private CommandCenter commandCenter;
+    private WebDesignScreen webDesign;
+    private boolean webDesignFailed;
     private JPanel pnlInsets;
 
     private JLabel lblLogo = new FLabel.Builder()
@@ -231,20 +233,40 @@ public enum VHomeUI implements IVTopLevelUI {
         pnl.setLayout(new MigLayout("insets 0, gap 0"));
         pnlInsets = pnl;
 
-        if (commandCenter == null) {
-            commandCenter = new CommandCenter();
-        }
-        // Land on the redesigned Command Center dashboard.
+        // Land on the redesigned home (HTML WebView if JavaFX is available,
+        // otherwise the custom-painted Command Center).
         showDashboard();
     }
 
-    /** Show the redesigned Command Center landing (full-bleed). */
+    /** Show the redesigned home landing (full-bleed). */
     public void showDashboard() {
         if (pnlInsets == null) { return; }
         pnlInsets.removeAll();
-        pnlInsets.add(commandCenter, "w 100%!, h 100%!");
+        pnlInsets.add(getLanding(), "w 100%!, h 100%!");
         pnlInsets.revalidate();
         pnlInsets.repaint();
+    }
+
+    private java.awt.Component getLanding() {
+        if (webDesign == null && !webDesignFailed) {
+            try {
+                webDesign = new WebDesignScreen(() -> { // async FX failure -> swap to Command Center
+                    webDesignFailed = true;
+                    webDesign = null;
+                    showDashboard();
+                });
+            } catch (final Throwable t) { // JavaFX missing/unavailable -> fall back
+                webDesignFailed = true;
+                System.err.println("WebDesignScreen unavailable, falling back to Command Center: " + t);
+            }
+        }
+        if (webDesign != null) {
+            return webDesign;
+        }
+        if (commandCenter == null) {
+            commandCenter = new CommandCenter();
+        }
+        return commandCenter;
     }
 
     /** Show the classic menu + submenu content layout (used when a mode is opened). */

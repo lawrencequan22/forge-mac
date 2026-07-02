@@ -298,6 +298,50 @@ try {
     </build>
 
     <dependencies>
+        <!-- Redesign: JavaFX WebView (arm64) hosts the HTML design. Provided scope keeps
+             them off the assembly uber-jar; the mac build stages them onto the classpath. -->
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-web</artifactId>
+            <version>17.0.13</version>
+            <classifier>mac-aarch64</classifier>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-media</artifactId>
+            <version>17.0.13</version>
+            <classifier>mac-aarch64</classifier>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-swing</artifactId>
+            <version>17.0.13</version>
+            <classifier>mac-aarch64</classifier>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-controls</artifactId>
+            <version>17.0.13</version>
+            <classifier>mac-aarch64</classifier>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-graphics</artifactId>
+            <version>17.0.13</version>
+            <classifier>mac-aarch64</classifier>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-base</artifactId>
+            <version>17.0.13</version>
+            <classifier>mac-aarch64</classifier>
+            <scope>provided</scope>
+        </dependency>
         <dependency>
             <groupId>forge</groupId>
             <artifactId>forge-core</artifactId>

@@ -126,40 +126,50 @@ public class PlayerPanel extends FPanel {
         this.pchLabel = lobby.newLabel(localizer.getMessage("lblPlanarDeck") + ":");
         this.vgdLabel = lobby.newLabel(localizer.getMessage("lblVanguard") + ":");
 
-        setLayout(new MigLayout("insets 10px, gap 5px"));
+        // Redesign: compact mockup seat card — avatar · name/deck · Human/AI · remove.
+        setLayout(new MigLayout("insets 12 14 12 14, gap 6 6, hidemode 3, fillx"));
 
-        // Add a button to players 3+ (or if server) to remove them from the setup
+        // Remove button (players 3+ / server) — top-right of the card
         closeBtn = createCloseButton();
-        this.add(closeBtn, "w 20, h 20, pos (container.w-20) 0");
+        this.add(closeBtn, "w 22, h 22, pos (container.w-30) 10");
 
         createAvatar();
-        this.add(avatarLabel, "cell 0 0, spany 2, split 2, width 80px, height 80px");
+        this.add(avatarLabel, "cell 0 0, spany 2, w 52px!, h 52px!");
 
         createSleeve();
-        this.add(sleeveLabel, "width 58px, height 80px, gapleft 5px");
+        this.add(sleeveLabel, "cell 0 2, w 52px!, h 32px!, gaptop 4");
 
+        // Name + randomiser (row 0, main column)
         createNameEditor();
-        this.add(lobby.newLabel(localizer.getMessage("lblName") +":"), "w 40px, h 30px, gaptop 5px");
-        this.add(txtPlayerName, "h 30px, pushx, growx");
-
+        this.add(txtPlayerName, "cell 1 0, h 30px!, growx, pushx, split 2");
         nameRandomiser = createNameRandomizer();
-        this.add(nameRandomiser, "h 30px, w 30px, gaptop 5px");
+        this.add(nameRandomiser, "h 30px!, w 30px!");
 
+        // Human / AI toggle (row 0, right)
         createPlayerTypeOptions();
-        this.add(radioHuman, "gapright 5px");
+        this.add(radioHuman, "cell 2 0, split 2, gapright 8");
         this.add(radioAi, "wrap");
 
-        int cellY = 1;
+        // Deck selector (row 1)
+        this.add(deckLabel, "cell 1 1, split 2, w 46px!, ax left");
+        this.add(deckBtn, "growx, pushx, h 30px!, span 2, wrap");
+        addHandlersDeckSelector();
+
+        // Commander deck (row 2, conditional)
+        this.add(cmdLabel, "cell 1 2, split 2, w 46px!, ax left");
+        this.add(cmdDeckSelectorBtn, "growx, pushx, h 30px!, span 2, wrap");
+
+        // AI picker (row 3, conditional)
         if (prefs.getPrefBoolean(FPref.UI_ENABLE_AI_PICKER)) {
-            this.add(aiPickerLabel, "w 40px, h 30px");
+            this.add(aiPickerLabel, "cell 1 3, split 2, w 46px!, ax left");
             populateAiPickerComboBox();
-            aiPickerComboBox.addTo(this, "h 30px, pushx, growx, wrap");
+            aiPickerComboBox.addTo(this, "growx, pushx, h 30px!, span 2, wrap");
             aiPickerComboBox.addActionListener(aiPickerListener);
-            cellY += 1;
         }
         this.setAiProfile(slot.getAiProfile());
 
-        this.add(lobby.newLabel(localizer.getMessage("lblTeam") + ":"), "cell 0 " + cellY +", sx 2, ax right, w 40px, h 30px");
+        // Team (row 4)
+        this.add(lobby.newLabel(localizer.getMessage("lblTeam") + ":"), "cell 1 4, split 2, w 46px!, ax left");
         populateTeamsComboBoxes();
 
         // Set these before action listeners are added
@@ -168,33 +178,28 @@ public class PlayerPanel extends FPanel {
 
         teamComboBox.addActionListener(teamListener);
         aeTeamComboBox.addActionListener(teamListener);
-        teamComboBox.addTo(this, variantBtnConstraints + ", cell 2 " + cellY + ", growx, gaptop 5px, wrap");
-        aeTeamComboBox.addTo(this, variantBtnConstraints + ", cell 2 " + cellY + ", growx, gaptop 5px, wrap");
+        teamComboBox.addTo(this, "growx, h 30px!, span 2, wrap");
+        aeTeamComboBox.addTo(this, "growx, h 30px!, span 2, wrap");
 
         createReadyButton();
         if (allowNetworking) {
-            this.add(radioOpen, "cell 4 4, ax left, sx 2");
-            this.add(chkReady, "cell 5 4, ax left, sx 2, wrap");
+            this.add(radioOpen, "cell 1 5, split 2");
+            this.add(chkReady, "wrap");
         }
 
-        this.add(deckLabel, variantBtnConstraints + ", cell 0 3, sx 2, ax right");
-        this.add(deckBtn, variantBtnConstraints + ", cell 2 3, pushx, growx, wmax 100%-153px, h 30px, spanx 4, wrap");
+        // Scheme deck (Archenemy) — row 6
+        this.add(scmLabel, "cell 1 6, split 3, w 46px!, ax left");
+        this.add(scmDeckSelectorBtn, "growx, pushx");
+        this.add(scmDeckEditor, "wrap");
 
-        addHandlersDeckSelector();
+        // Planar deck (Planechase) — row 7
+        this.add(pchLabel, "cell 1 7, split 3, w 46px!, ax left");
+        this.add(pchDeckSelectorBtn, "growx, pushx");
+        this.add(pchDeckEditor, "wrap");
 
-        this.add(cmdLabel, variantBtnConstraints + ", cell 0 2, sx 2, ax right");
-        this.add(cmdDeckSelectorBtn, variantBtnConstraints + ", cell 2 2, pushx, growx, wmax 100%-153px, h 30px, spanx 4, wrap");
-
-        this.add(scmLabel, variantBtnConstraints + ", cell 0 4, sx 2, ax right");
-        this.add(scmDeckSelectorBtn, variantBtnConstraints + ", cell 2 4, growx, pushx");
-        this.add(scmDeckEditor, variantBtnConstraints + ", cell 3 4, sx 3, growx, wrap");
-
-        this.add(pchLabel, variantBtnConstraints + ", cell 0 5, sx 2, ax right");
-        this.add(pchDeckSelectorBtn, variantBtnConstraints + ", cell 2 5, growx, pushx");
-        this.add(pchDeckEditor, variantBtnConstraints + ", cell 3 5, sx 3, growx, wrap");
-
-        this.add(vgdLabel, variantBtnConstraints + ", cell 0 6, sx 2, ax right");
-        this.add(vgdSelectorBtn, variantBtnConstraints + ", cell 2 6, sx 4, growx, wrap");
+        // Vanguard avatar — row 8
+        this.add(vgdLabel, "cell 1 8, split 2, w 46px!, ax left");
+        this.add(vgdSelectorBtn, "growx, pushx, span 2, wrap");
 
         addHandlersToVariantsControls();
 
@@ -206,7 +211,7 @@ public class PlayerPanel extends FPanel {
 
         if (isNetworkHost()) {
             createDevModeButton();
-            this.add(chkDevMode);
+            this.add(chkDevMode, "cell 1 9, span 2, wrap");
         }
 
         this.type = slot == null ? LobbySlotType.LOCAL : slot.getType();
