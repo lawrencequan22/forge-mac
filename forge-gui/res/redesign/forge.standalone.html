@@ -794,7 +794,6 @@ class Component extends DCLogic {
       { hasTitle: true, title: 'More Modes', items: [
         item('gauntlet', 'Gauntlet', 'play', { mode: 'Gauntlet', format: 'Constructed' }),
         item('puzzle', 'Puzzle', 'quest'),
-        item('conquest', 'Planar Conquest', 'play', { mode: 'Planar Conquest', format: 'Commander' }),
         item('online', 'Online Multiplayer', 'play', { mode: 'Online Multiplayer', format: 'Constructed' }),
       ] },
       { hasTitle: true, title: 'Settings', items: [
@@ -829,7 +828,6 @@ class Component extends DCLogic {
       { name: 'Quest', tag: 'Campaign', desc: 'Earn credits, grow a collection.', accent: 'var(--g)', glow: 'rgba(95,176,111,0.4)', go: () => self.go('quest', 'qduels') },
       { name: 'Gauntlet', tag: 'Series', desc: 'Run a ladder of opponents.', accent: 'var(--r)', glow: 'rgba(219,92,72,0.4)', go: () => self.go('play', 'gauntlet', { mode: 'Gauntlet', format: 'Constructed' }) },
       { name: 'Puzzle', tag: 'Solve', desc: 'Win from a fixed board state.', accent: 'var(--u)', glow: 'rgba(90,151,221,0.4)', go: () => self.go('quest', 'puzzle') },
-      { name: 'Planar Conquest', tag: 'Campaign', desc: 'Conquer planes, unlock commanders.', accent: 'var(--b)', glow: 'rgba(154,120,196,0.4)', go: () => self.go('play', 'conquest', { mode: 'Planar Conquest', format: 'Commander' }) },
     ].map(m => ({ ...m, onClick: m.go }));
 
     // Real data from Forge (window.FORGE_DATA, populated by the bridge) with sample fallback.

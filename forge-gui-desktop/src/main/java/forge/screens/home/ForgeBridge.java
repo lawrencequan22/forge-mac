@@ -105,11 +105,16 @@ public class ForgeBridge {
 
     // ---------------- actions (Swing EDT) ----------------
 
-    /** Open Forge's native deck editor. */
+    /** Open Forge's native constructed deck editor (screen + editor controller). */
     public void openDeckEditor() {
         SwingUtilities.invokeLater(() -> {
-            try { Singletons.getControl().setCurrentScreen(FScreen.DECK_EDITOR_CONSTRUCTED); }
-            catch (final Throwable t) { t.printStackTrace(); }
+            try {
+                Singletons.getControl().setCurrentScreen(FScreen.DECK_EDITOR_CONSTRUCTED);
+                final forge.screens.deckeditor.CDeckEditorUI ui = forge.screens.deckeditor.CDeckEditorUI.SINGLETON_INSTANCE;
+                ui.setEditorController(new forge.screens.deckeditor.controllers.CEditorConstructed(ui.getCDetailPicture()));
+            } catch (final Throwable t) {
+                t.printStackTrace();
+            }
         });
     }
 
