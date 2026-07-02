@@ -1,6 +1,8 @@
 package forge.screens.home;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import javax.swing.SwingUtilities;
@@ -8,11 +10,18 @@ import javax.swing.SwingUtilities;
 import forge.Singletons;
 import forge.card.ColorSet;
 import forge.deck.Deck;
+import forge.deck.DeckgenUtil;
+import forge.game.GameRules;
+import forge.game.GameType;
+import forge.game.player.RegisteredPlayer;
+import forge.gamemodes.match.HostedMatch;
+import forge.gui.GuiBase;
 import forge.gui.framework.EDocID;
 import forge.gui.framework.FScreen;
 import forge.item.PaperCard;
 import forge.localinstance.properties.ForgeConstants;
 import forge.model.FModel;
+import forge.player.GamePlayerUtil;
 
 /**
  * Bridge exposed to the HTML design as {@code window.forge}. Read methods return JSON
@@ -101,6 +110,70 @@ public class ForgeBridge {
         } catch (final Throwable t) {
             return "{\"active\":false}";
         }
+    }
+
+    /** The user's real Constructed decks, for the lobby deck picker. */
+    public String getDecks() {
+        final StringBuilder sb = new StringBuilder("[");
+        try {
+            boolean first = true;
+            for (final Deck d : FModel.getDecks().getConstructed()) {
+                if (!first) { sb.append(','); }
+                appendDeck(sb, d, "Constructed");
+                first = false;
+            }
+        } catch (final Throwable t) { /* ignore */ }
+        return sb.append(']').toString();
+    }
+
+    // ---------------- match launch (stateful builder, avoids JSON parsing) ----------------
+
+    private final List<String[]> pendingPlayers = new ArrayList<>(); // {name, ai("1"/"0"), deckName}
+    private int pendingGames = 3;
+
+    public void newGame() { pendingPlayers.clear(); pendingGames = 3; }
+    public void addPlayer(final String name, final boolean ai, final String deckName) {
+        pendingPlayers.add(new String[] { name == null ? "Player" : name, ai ? "1" : "0", deckName == null ? "" : deckName });
+    }
+    public void setGames(final int n) { pendingGames = (n == 1 || n == 3 || n == 5) ? n : 3; }
+
+    /** Launch a real native Constructed match from the collected seats. */
+    public void launchConstructed() {
+        final List<String[]> cfg = new ArrayList<>(pendingPlayers);
+        final int games = pendingGames;
+        SwingUtilities.invokeLater(() -> {
+            try {
+                final List<RegisteredPlayer> players = new ArrayList<>();
+                RegisteredPlayer human = null;
+                for (final String[] p : cfg) {
+                    final boolean ai = "1".equals(p[1]);
+                    final Deck deck = resolveDeck(p[2], ai);
+                    final RegisteredPlayer rp = new RegisteredPlayer(deck).setPlayer(
+                            ai ? GamePlayerUtil.createAiPlayer(p[0]) : GamePlayerUtil.getGuiPlayer());
+                    players.add(rp);
+                    if (!ai && human == null) { human = rp; }
+                }
+                if (players.size() < 2) { return; }
+                if (human == null) { human = players.get(0); }
+                final GameRules rules = new GameRules(GameType.Constructed);
+                rules.setGamesPerMatch(games);
+                final HostedMatch hostedMatch = GuiBase.getInterface().hostMatch();
+                hostedMatch.startMatch(rules, null, players, human, GuiBase.getInterface().getNewGuiGame());
+            } catch (final Throwable t) {
+                t.printStackTrace();
+            }
+        });
+    }
+
+    private Deck resolveDeck(final String name, final boolean ai) {
+        try {
+            if (name != null && !name.isEmpty()
+                    && !name.equalsIgnoreCase("Random") && !name.equalsIgnoreCase("Generated")) {
+                final Deck d = FModel.getDecks().getConstructed().get(name);
+                if (d != null) { return d; }
+            }
+        } catch (final Throwable t) { /* fall through to random */ }
+        return DeckgenUtil.getRandomColorDeck(ai);
     }
 
     // ---------------- actions (Swing EDT) ----------------

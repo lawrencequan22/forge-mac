@@ -36,6 +36,7 @@ RUNTIME = r"""
         window.FORGE_DATA.recentDecks = JSON.parse(window.forge.getRecentDecks() || '[]');
         window.FORGE_DATA.releaseNotes = JSON.parse(window.forge.getReleaseNotes() || '[]');
         window.FORGE_DATA.quest = JSON.parse(window.forge.getQuest() || '{}');
+        window.FORGE_DATA.decks = JSON.parse(window.forge.getDecks() || '[]');
       }
     } catch(e) { console.error('forge data', e); }
     if (window.__dcRender) window.__dcRender();

@@ -641,10 +641,10 @@ class Component extends DCLogic {
   state = {
     screen: 'home', active: 'home', theme: 'dark', collapsed: {},
     mode: 'Constructed', format: 'Constructed', settingsCat: 'Preferences',
-    life: 20, best: 'Bo3', opp: 'Sarkhan', deck: 'Azorius Control', oppDeck: 'Random',
+    life: 20, best: 'Bo3', opp: 'Sarkhan', deck: 'Random', oppDeck: 'Random',
     players: [
-      { id: 1, name: 'You', type: 'Human', deck: 'Azorius Control' },
-      { id: 2, name: 'Sarkhan (AI)', type: 'AI', deck: 'Random' },
+      { id: 1, name: 'You', type: 'Human', deck: 'Random' },
+      { id: 2, name: 'AI Opponent', type: 'AI', deck: 'Random' },
     ], nextPid: 3, openDeck: null,
     variants: { Commander: false, Planechase: false, Archenemy: false, Vanguard: false, 'Momir Basic': false, 'Tiny Leaders': false },
     colors: { W: true, U: true, B: false, R: false, G: false },
@@ -822,8 +822,12 @@ class Component extends DCLogic {
       bg: s.best === n ? 'var(--gold)' : 'var(--panel2)',
       border: s.best === n ? 'var(--gold)' : 'var(--line2)',
     }));
-    const deckPips = { 'Azorius Control': [C.W, C.U], 'Gruul Aggro': [C.R, C.G], 'Dimir Mill': [C.U, C.B], 'Mono-Green Stompy': [C.G], 'Prossh, Skyraider': [C.B, C.R, C.G], 'Random': [], 'Generated': [] };
-    const deckNames = ['Azorius Control', 'Gruul Aggro', 'Dimir Mill', 'Mono-Green Stompy', 'Random', 'Generated'];
+    // Real decks from Forge (with sample fallback for bare browser preview).
+    const fdDecks = (FD.decks && FD.decks.length) ? FD.decks
+      : (HAS_BRIDGE ? [] : [{ name: 'Azorius Control', colors: ['W', 'U'] }, { name: 'Gruul Aggro', colors: ['R', 'G'] }, { name: 'Dimir Mill', colors: ['U', 'B'] }, { name: 'Mono-Green Stompy', colors: ['G'] }]);
+    const deckPips = { 'Random': [] };
+    fdDecks.forEach(d => { deckPips[d.name] = (d.colors || []).map(c => C[c]); });
+    const deckNames = [...fdDecks.map(d => d.name), 'Random'];
     const pAva = ['linear-gradient(140deg,var(--w),var(--u))', 'linear-gradient(140deg,var(--r),var(--b))', 'linear-gradient(140deg,var(--g),var(--u))', 'linear-gradient(140deg,var(--b),var(--r))', 'linear-gradient(140deg,var(--g),var(--w))', 'linear-gradient(140deg,var(--u),var(--b))', 'linear-gradient(140deg,var(--r),var(--g))', 'linear-gradient(140deg,var(--w),var(--r))'];
     const players = s.players.map((p, i) => {
       const isH = p.type === 'Human';
@@ -1020,7 +1024,17 @@ class Component extends DCLogic {
       setDark: () => self.setTheme('dark'), setLight: () => self.setTheme('light'),
       darkBtn: !isLight ? 'var(--gold)' : 'transparent', darkCol: !isLight ? '#1c1608' : 'var(--dim)',
       lightBtn: isLight ? 'var(--gold)' : 'transparent', lightCol: isLight ? '#1c1608' : 'var(--dim)',
-      goBattle: () => self.go('battle'), goDecks: () => self.go('decks'), goPlay: () => self.go('play', 'constructed', { mode: 'Constructed', format: 'Constructed' }),
+      goBattle: () => {
+        if (typeof window !== 'undefined' && window.forge) {
+          try {
+            window.forge.newGame();
+            s.players.forEach(p => window.forge.addPlayer(p.name, p.type === 'AI', p.deck));
+            window.forge.setGames(s.best === 'Bo1' ? 1 : (s.best === 'Bo5' ? 5 : 3));
+            window.forge.launchConstructed();
+          } catch (e) { console.error('start game', e); }
+        } else { self.go('battle'); }
+      },
+      goDecks: () => self.go('decks'), goPlay: () => self.go('play', 'constructed', { mode: 'Constructed', format: 'Constructed' }),
       goQuest: () => { if (typeof window !== 'undefined' && window.forge) { self.openSub('HOME_QUESTSTART'); } else { self.go('quest', 'qduels'); } },
       goNotes: () => { if (typeof window !== 'undefined' && window.forge) { self.openSub('HOME_RELEASE_NOTES'); } else { self.go('settings', 'notes', { settingsCat: 'Release Notes' }); } },
       goAvatars: () => { if (typeof window !== 'undefined' && window.forge) { self.openSub('HOME_AVATARS'); } else { self.go('settings', 'ava', { settingsCat: 'Avatars' }); } },
