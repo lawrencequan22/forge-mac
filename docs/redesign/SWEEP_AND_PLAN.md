@@ -212,6 +212,31 @@ dropped menu items** (they were already registered in `VHomeUI`; only the web mo
   flat chips and Start is gold via the toolbox WIP.
 - **Phases 3–5 — Deck Editor / Battlefield / Settings: TODO.**
 
+## 6c. Architecture pivot — embed the HTML design (chosen)
+
+Native Swing can only *approximate* the HTML design (fonts, gradients, radii). To match it
+exactly AND stay easy to re-apply as a **mod over upstream Forge updates**, the chosen approach
+is: **render the real design in an embedded WebView inside the Java app**, keep Forge's Java
+engine + native gameplay, and isolate the design as a mod.
+
+Mod structure (minimize upstream coupling for clean re-application after each Forge release):
+- Design = `res/redesign/forge.standalone.html` (+ `assemble-standalone.py`) — pure resources,
+  zero merge conflict.
+- `WebDesignScreen.java` — new file, no conflict.
+- Upstream touch-points kept tiny: a few lines in `VHomeUI` (landing hook + fallback), JavaFX
+  deps in `pom.xml`, and a desktop-only stage step in the fork-owned `build-mac-app.sh`.
+- Gameplay (match/battlefield) stays native Forge — the part that changes most; never re-skinned.
+
+**Status: WORKING.** The desktop app renders the exact design in a JavaFX WebView (arm64,
+bundled via jpackage), interactive within the design, with a Command Center fallback if JavaFX is
+absent. Verified running.
+
+**Not yet done — the JS↔Java bridge.** The WebView's buttons currently drive the design's own
+state only; they do not launch real games. Next: expose a small, stable Java bridge to the
+WebView (`window.forge.startGame(...)`, `openDeckEditor()`, etc.) and have the design's action
+handlers call it, so the design actually drives the engine. Keep the surface small for
+mod-friendliness. Battlefield/gameplay remain native.
+
 ## 7. Open decisions for the user
 1. **Approach A vs B** (recommend A).
 2. **Fidelity bar** for Swing: "faithful interpretation" (recommended) vs. "as pixel-close as
