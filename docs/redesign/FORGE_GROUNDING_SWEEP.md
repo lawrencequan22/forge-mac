@@ -129,6 +129,29 @@ gameplay in HTML.
    design battlefield).
 5. Keep gameplay + deep editing **native** (handoff).
 
+## Status — DONE (verified running)
+
+- **Home**: real quest hero (`getQuest`), real Recent Decks (`getRecentDecks`) / Release Notes
+  (`getReleaseNotes`) with honest empty states (no fabricated data in-app). ✅
+- **Deck Editor**: opens the real native editor (94k cards). ✅
+- **Constructed lobby**: real decks in the picker (`getDecks`), and **START GAME launches a real
+  native match** (`launchConstructed` → `hostMatch().startMatch`). ✅
+- **Handoffs to native** (real screens): Preferences/Settings, Quest (New Quest/Duels/Challenges/
+  Quest Draft/Quest Decks), Booster Draft, Sealed, Gauntlet, Puzzle, Online, Achievements,
+  Avatars, Content Downloaders, Release Notes, Resume Quest/Spell Shop. ✅
+- **Removed**: Planar Conquest (not desktop). ✅
+- Round-trip back to the design Home via the anvil logo. ✅
+
+### Known gaps / next enhancements
+- **Lobby variants** (Commander, Planechase, Archenemy, Vanguard, Momir, Tiny Leaders): the chips
+  display but are **not yet applied** to the launched match (common case = plain Constructed
+  only). Next: either apply variants in `launchConstructed`, or hand off to the native lobby when
+  a variant is selected.
+- The design's own Quest/Settings/Battlefield screens still contain placeholder markup, but are
+  **unreachable in-app** (those nav items hand off to native). Optional future work: bring them
+  into the design with injected real data instead of handing off.
+- Starting-Life stepper in the design lobby is not applied (Forge derives life); currently cosmetic.
+
 ## Decisions to confirm
 - **Deck Editor:** HANDOFF to native (recommended) vs. rebuild a real HTML editor (large)?
 - **Lobby:** design handles common case + native handoff for advanced (recommended) vs. full
